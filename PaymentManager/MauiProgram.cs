@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentManager.Services; 
-using PaymentManager.Views; 
+using PaymentManager.Data; 
 
 namespace PaymentManager
 {
@@ -20,7 +20,7 @@ namespace PaymentManager
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddDbContext<Data.AppDbContext>(options =>
+            builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlite("Data Source=app.db"); 
             });
@@ -31,7 +31,7 @@ namespace PaymentManager
 
             using (var scope = Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<Data.AppDbContext>();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 db.Database.EnsureCreated();
             }
             return app;
