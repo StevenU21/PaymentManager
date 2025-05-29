@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaymentManager.Services; 
+using PaymentManager.Services;
 using PaymentManager.Data; 
+using CommunityToolkit.Maui;
 
 namespace PaymentManager
 {
@@ -14,6 +15,7 @@ namespace PaymentManager
 
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

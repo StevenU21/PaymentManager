@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             x:Class="PaymentManager.Views.UserPage"  
+             Title="Usuarios"
+             BackgroundColor="#181818">
+
+    <StackLayout Padding="10" Spacing="10">
+        <Button Text="Registrar"
+                HorizontalOptions="End"
+                Margin="0,0,0,10"
+                Command="{Binding RegisterUserCommand}"
+                BackgroundColor="#2D2D2D"
+                TextColor="#FAFAFA"
+                CornerRadius="8"
+                FontAttributes="Bold"
+                HeightRequest="44"/>
+
+        <CollectionView ItemsSource="{Binding Users}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,12"
+                           Padding="16"
+                           BackgroundColor="#232323"
+                           BorderColor="#444"
+                           CornerRadius="12"
+                           HasShadow="True">
+                        <StackLayout>
+                            <Label Text="{Binding Name}"
+                                   FontAttributes="Bold"
+                                   FontSize="18"
+                                   TextColor="#FAFAFA"/>
+                            <Label Text="{Binding Email}"
+                                   FontSize="14"
+                                   TextColor="#B0B0B0"
+                                   Margin="0,2,0,0"/>
+                            <Label Text="{Binding Phone}"
+                                   FontSize="14"
+                                   TextColor="#B0B0B0"
+                                   Margin="0,2,0,0"/>
+                            <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                                <Button Text="Mostrar"
+                                        Command="{Binding BindingContext.ShowUserCommand, Source={x:Reference Name=UserPage}}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#333"
+                                        TextColor="#FAFAFA"
+                                        CornerRadius="8"
+                                        FontSize="13"
+                                        HeightRequest="36"
+                                        WidthRequest="80"/>
+                                <Button Text="Editar"
+                                        Command="{Binding BindingContext.EditUserCommand, Source={x:Reference Name=UserPage}}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#1976D2"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        FontSize="13"
+                                        HeightRequest="36"
+                                        WidthRequest="80"/>
+                                <Button Text="Eliminar"
+                                        Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference Name=UserPage}}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#B00020"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        FontSize="13"
+                                        HeightRequest="36"
+                                        WidthRequest="80"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

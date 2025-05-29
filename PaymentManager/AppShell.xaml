@@ -14,4 +14,8 @@
             Route="MainPage" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Usuarios" Icon="users.png">
+        <ShellContent Route="users" ContentTemplate="{DataTemplate views:UserPage}" />
+    </FlyoutItem>
+
 </Shell>
