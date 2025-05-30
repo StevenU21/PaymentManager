@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PaymentManager.Views.UserPage"
+             x:Name="UserPageRoot"
              Title="Usuarios"
              BackgroundColor="#181818">
 
@@ -51,7 +52,7 @@
                                 <HorizontalStackLayout Spacing="10"
                                                        Margin="0,10,0,0">
                                     <Button Text="Editar"
-                                            Command="{Binding BindingContext.EditUserCommand, Source={x:Reference UserPage}}"
+                                            Command="{Binding BindingContext.EditUserCommand, Source={x:Reference UserPageRoot}}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#1976D2"
                                             TextColor="White"
@@ -60,7 +61,7 @@
                                             HeightRequest="36"
                                             WidthRequest="80" />
                                     <Button Text="Eliminar"
-                                            Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference UserPage}}"
+                                            Command="{Binding BindingContext.DeleteUserCommand, Source={x:Reference UserPageRoot}}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#B00020"
                                             TextColor="White"

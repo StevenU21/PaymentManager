@@ -23,7 +23,7 @@ namespace PaymentManager.ViewModels
             RegisterUserCommand = new Command(async () => await OpenRegisterModal());
             ShowUserCommand = new Command<User>(user => { /* lógica para mostrar */ });
             EditUserCommand = new Command<User>(user => { /* lógica para editar */ });
-            DeleteUserCommand = new Command<User>(user => { /* lógica para eliminar */ });
+            DeleteUserCommand = new Command<User>(async (user) => await DeleteUserAsync(user));
         }
 
         public Command LoadUsersCommand { get; }
@@ -39,7 +39,7 @@ namespace PaymentManager.ViewModels
                 Users.Add(user);
             IsBusy = false;
         }
-        
+
         private async Task OpenRegisterModal()
         {
             var userFormPage = new Views.UserFormPage();
@@ -51,6 +51,22 @@ namespace PaymentManager.ViewModels
                 userFormPage.BindingContext = new UserFormViewModel(_userService, mainPage.Navigation);
                 await mainPage.Navigation.PushModalAsync(userFormPage);
             }
+        }
+        
+        private async Task DeleteUserAsync(User user)
+        {
+            if (user == null) return;
+
+            // Opcional: Confirmación con el usuario
+            bool confirm = await Application.Current.MainPage.DisplayAlert(
+                "Eliminar usuario",
+                $"¿Estás seguro de eliminar a {user.Name}?",
+                "Sí", "No");
+
+            if (!confirm) return;
+
+            await _userService.DeleteUserAsync(user.Id);
+            Users.Remove(user);
         }
     }
 }
