@@ -7,24 +7,29 @@ namespace PaymentManager.ViewModels
 {
     public class UsersViewModel
     {
+        private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
+        private readonly IUserValidationService _userValidationService;
 
         public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
 
         public Command RegisterUserCommand { get; }
-        public Command<User> ShowUserCommand { get; }
         public Command<User> EditUserCommand { get; }
         public Command<User> DeleteUserCommand { get; }
         public Command LoadUsersCommand { get; }
 
         public bool IsBusy { get; set; }
 
-        public UsersViewModel(IUserService userService)
+        public UsersViewModel(
+            IUserService userService,
+            IUserValidationService userValidationService,
+            IMessagingService messagingService)
         {
             _userService = userService;
+            _userValidationService = userValidationService;
+            _messagingService = messagingService;
             LoadUsersCommand = new Command(async () => await LoadUsersAsync());
             RegisterUserCommand = new Command(async () => await OpenRegisterModal());
-            ShowUserCommand = new Command<User>(user => { /* lógica para mostrar */ });
             EditUserCommand = new Command<User>(async user => await OpenEditModal(user));
             DeleteUserCommand = new Command<User>(async user => await DeleteUserAsync(user));
         }
@@ -47,10 +52,10 @@ namespace PaymentManager.ViewModels
             var mainPage = mainWindow?.Page;
             if (mainPage?.Navigation != null)
             {
-                var viewModel = new UserFormViewModel(_userService, mainPage.Navigation);
+                var viewModel = new UserFormViewModel(_userService, _userValidationService, _messagingService, mainPage.Navigation);
                 viewModel.UserSaved += user =>
                 {
-                    Users.Add(user); // Solo agrega el nuevo usuario
+                    Users.Add(user);
                 };
                 userFormPage.BindingContext = viewModel;
                 await mainPage.Navigation.PushModalAsync(userFormPage);
@@ -66,17 +71,15 @@ namespace PaymentManager.ViewModels
             var mainPage = mainWindow?.Page;
             if (mainPage?.Navigation != null)
             {
-                var viewModel = new UserFormViewModel(user, _userService, mainPage.Navigation);
+                var viewModel = new UserFormViewModel(user, _userService, _userValidationService, _messagingService, mainPage.Navigation);
                 viewModel.UserSaved += updatedUser =>
                 {
                     var existing = Users.FirstOrDefault(u => u.Id == updatedUser.Id);
                     if (existing != null)
                     {
-                        // Solo actualiza las propiedades, no reemplaces el objeto
                         existing.Name = updatedUser.Name;
                         existing.Email = updatedUser.Email;
                         existing.Phone = updatedUser.Phone;
-                        // Si agregas más propiedades editables, actualízalas aquí también
                     }
                 };
                 userFormPage.BindingContext = viewModel;
@@ -88,10 +91,11 @@ namespace PaymentManager.ViewModels
         {
             if (user == null) return;
 
-            bool confirm = await Application.Current.MainPage.DisplayAlert(
+            bool confirm = await _messagingService.ShowConfirmationAsync(
                 "Eliminar usuario",
                 $"¿Estás seguro de eliminar a {user.Name}?",
-                "Sí", "No");
+                "Sí", "No"
+            );
 
             if (!confirm) return;
 

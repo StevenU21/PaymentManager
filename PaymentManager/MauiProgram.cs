@@ -22,6 +22,8 @@ namespace PaymentManager
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSingleton<IUserValidationService, UserValidationService>();
+            builder.Services.AddSingleton<IMessagingService, MessagingService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlite("Data Source=app.db"); 
