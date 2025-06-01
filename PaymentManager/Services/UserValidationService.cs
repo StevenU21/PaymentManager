@@ -33,7 +33,6 @@ namespace PaymentManager.Services
                 return (false, errorMessage);
             }
 
-            // 4. Todo OK
             return (true, null);
         }
     }

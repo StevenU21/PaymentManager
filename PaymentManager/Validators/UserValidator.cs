@@ -1,5 +1,4 @@
 ﻿using PaymentManager.Models;
-using System.Collections.Generic;
 
 namespace PaymentManager.Validators
 {
