@@ -1,4 +1,6 @@
-﻿using PaymentManager.Models;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using PaymentManager.Models;
 using PaymentManager.Validators;
 
 namespace PaymentManager.Services
@@ -14,24 +16,24 @@ namespace PaymentManager.Services
 
         public async Task<(bool IsValid, string? ErrorMessage)> ValidateAsync(User user, bool isEdit = false)
         {
-            var nameError = UserValidator.ValidateName(user.Name);
-            if (nameError != null) return (false, nameError);
+            var allUsers = await _userService.GetUsersAsync();
+            var usersToValidate = isEdit
+                ? allUsers.Where(u => u.Id != user.Id)
+                : allUsers;
 
-            var emailError = UserValidator.ValidateEmail(user.Email);
-            if (emailError != null) return (false, emailError);
+            var validator = new UserValidator(usersToValidate);
+            var result = validator.Validate(user);
 
-            var phoneError = UserValidator.ValidatePhone(user.Phone);
-            if (phoneError != null) return (false, phoneError);
+            if (!result.IsValid)
+            {
+                var errors = result.Errors
+                    .SelectMany(kvp => kvp.Value)
+                    .ToArray();
+                var errorMessage = string.Join(" ", errors);
+                return (false, errorMessage);
+            }
 
-            var users = await _userService.GetUsersAsync();
-            var usersToValidate = isEdit ? users.Where(u => u.Id != user.Id) : users;
-
-            var uniqueEmailError = UserValidator.ValidateUniqueEmail(user.Email, usersToValidate);
-            if (uniqueEmailError != null) return (false, uniqueEmailError);
-
-            var uniquePhoneError = UserValidator.ValidateUniquePhone(user.Phone ?? string.Empty, usersToValidate);
-            if (uniquePhoneError != null) return (false, uniquePhoneError);
-
+            // 4. Todo OK
             return (true, null);
         }
     }
