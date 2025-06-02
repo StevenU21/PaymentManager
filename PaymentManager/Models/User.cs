@@ -1,8 +1,9 @@
-﻿using System.ComponentModel; 
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace PaymentManager.Models
 {
-    public class User : INotifyPropertyChanged 
+    public class User : INotifyPropertyChanged
     {
         public int Id { get; set; }
 
@@ -10,42 +11,21 @@ namespace PaymentManager.Models
         public string Name
         {
             get => name;
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
+            set => SetProperty(ref name, value);
         }
 
         private string email = string.Empty;
         public string Email
         {
             get => email;
-            set
-            {
-                if (email != value)
-                {
-                    email = value;
-                    OnPropertyChanged(nameof(Email));
-                }
-            }
+            set => SetProperty(ref email, value);
         }
 
         private string? phone;
         public string? Phone
         {
             get => phone;
-            set
-            {
-                if (phone != value)
-                {
-                    phone = value;
-                    OnPropertyChanged(nameof(Phone));
-                }
-            }
+            set => SetProperty(ref phone, value);
         }
 
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
@@ -55,7 +35,15 @@ namespace PaymentManager.Models
         public PaymentStatus? PaymentStatus { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
+
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return true;
+        }
     }
 }

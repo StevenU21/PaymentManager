@@ -11,12 +11,10 @@ namespace PaymentManager.ViewModels
         private readonly IUserValidationService _userValidationService;
 
         public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
-
         public Command RegisterUserCommand { get; }
         public Command<User> EditUserCommand { get; }
         public Command<User> DeleteUserCommand { get; }
         public Command LoadUsersCommand { get; }
-
         public bool IsBusy { get; set; }
 
         public UsersViewModel(
