@@ -1,47 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PaymentManager.Models;
 
 namespace PaymentManager.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService<User>, IUserService
     {
-        private readonly Data.AppDbContext _context;
+        public UserService(Data.AppDbContext context) : base(context) { }
 
-        public UserService(Data.AppDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<List<Models.User>> GetUsersAsync()
+        public override async Task<List<User>> GetAllAsync()
             => await _context.Users.Include(u => u.PaymentStatus).ToListAsync();
 
-        public async Task<Models.User?> GetUserByIdAsync(int id)
+        public override async Task<User?> GetByIdAsync(int id)
             => await _context.Users.Include(u => u.PaymentStatus).FirstOrDefaultAsync(u => u.Id == id);
 
-        public async Task AddUserAsync(Models.User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateUserAsync(Models.User user)
-        {
-            var existingUser = await _context.Users.FindAsync(user.Id);
-            if (existingUser != null)
-            {
-                _context.Entry(existingUser).CurrentValues.SetValues(user);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task DeleteUserAsync(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-        }
     }
-
 }

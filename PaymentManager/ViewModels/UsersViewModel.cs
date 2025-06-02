@@ -8,7 +8,7 @@ namespace PaymentManager.ViewModels
     {
         private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
-        private readonly IUserValidationService _userValidationService;
+        private readonly IValidationService<User> _userValidationService;
 
         public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
         public Command RegisterUserCommand { get; }
@@ -19,7 +19,7 @@ namespace PaymentManager.ViewModels
 
         public UsersViewModel(
             IUserService userService,
-            IUserValidationService userValidationService,
+            IValidationService<User> userValidationService,
             IMessagingService messagingService)
         {
             _userService = userService;
@@ -34,7 +34,7 @@ namespace PaymentManager.ViewModels
         private async Task LoadUsersAsync()
         {
             IsBusy = true;
-            var users = await _userService.GetUsersAsync();
+            var users = await _userService.GetAllAsync();
             Users.Clear();
             foreach (var user in users)
                 Users.Add(user);
@@ -96,7 +96,7 @@ namespace PaymentManager.ViewModels
 
             if (!confirm) return;
 
-            await _userService.DeleteUserAsync(user.Id);
+            await _userService.DeleteAsync(user.Id);
             Users.Remove(user);
         }
     }

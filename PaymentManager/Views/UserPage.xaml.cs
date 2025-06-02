@@ -1,5 +1,6 @@
 using PaymentManager.ViewModels;
 using PaymentManager.Services;
+using PaymentManager.Models;
 
 namespace PaymentManager.Views;
 
@@ -10,7 +11,7 @@ public partial class UserPage : ContentPage
         InitializeComponent();
         BindingContext = new UsersViewModel(
             MauiProgram.Services.GetService<IUserService>()!,
-            MauiProgram.Services.GetService<IUserValidationService>()!,
+            MauiProgram.Services.GetService<IValidationService<User>>()!,
             MauiProgram.Services.GetService<IMessagingService>()!
         );
     }

@@ -6,7 +6,7 @@ namespace PaymentManager.ViewModels
 {
     public class UserFormViewModel
     {
-        private readonly IUserValidationService _userValidationService;
+        private readonly IValidationService<User> _userValidationService;
         private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
         private readonly INavigation _navigation;
@@ -19,7 +19,7 @@ namespace PaymentManager.ViewModels
 
         public UserFormViewModel(
             IUserService userService,
-            IUserValidationService userValidationService,
+            IValidationService<User> userValidationService,
             IMessagingService messagingService,
             INavigation navigation)
         {
@@ -35,7 +35,7 @@ namespace PaymentManager.ViewModels
         public UserFormViewModel(
             User user,
             IUserService userService,
-            IUserValidationService userValidationService,
+            IValidationService<User> userValidationService,
             IMessagingService messagingService,
             INavigation navigation)
             : this(userService, userValidationService, messagingService, navigation)
@@ -55,12 +55,12 @@ namespace PaymentManager.ViewModels
 
             if (User.Id != 0)
             {
-                await _userService.UpdateUserAsync(User);
+                await _userService.UpdateAsync(User);
                 UserSaved?.Invoke(User);
             }
             else
             {
-                await _userService.AddUserAsync(User);
+                await _userService.AddAsync(User);
                 UserSaved?.Invoke(User);
             }
 

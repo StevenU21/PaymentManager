@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace PaymentManager.Models
+﻿namespace PaymentManager.Models
 {
-    public class User : INotifyPropertyChanged
+    public class User : ObservableObject
     {
         public int Id { get; set; }
 
@@ -33,17 +30,5 @@ namespace PaymentManager.Models
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<PaymentPlan> PaymentPlans { get; set; } = new List<PaymentPlan>();
         public PaymentStatus? PaymentStatus { get; set; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            return true;
-        }
     }
 }

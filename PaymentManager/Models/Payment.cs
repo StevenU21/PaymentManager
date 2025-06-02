@@ -1,28 +1,66 @@
-﻿
-namespace PaymentManager.Models
+﻿namespace PaymentManager.Models
 {
-    public class Payment
+    public class Payment : ObservableObject
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        private int userId;
+        public int UserId
+        {
+            get => userId;
+            set => SetProperty(ref userId, value);
+        }
 
-        public DateTime PaymentDate { get; set; }
+        private DateTime paymentDate;
+        public DateTime PaymentDate
+        {
+            get => paymentDate;
+            set => SetProperty(ref paymentDate, value);
+        }
 
-        public decimal AmountPaid { get; set; }
+        private decimal amountPaid;
+        public decimal AmountPaid
+        {
+            get => amountPaid;
+            set => SetProperty(ref amountPaid, value);
+        }
 
-        public ushort PeriodsPaid { get; set; }
+        private ushort periodsPaid;
+        public ushort PeriodsPaid
+        {
+            get => periodsPaid;
+            set => SetProperty(ref periodsPaid, value);
+        }
 
-        public DateTime NextDueDate { get; set; }
+        private DateTime nextDueDate;
+        public DateTime NextDueDate
+        {
+            get => nextDueDate;
+            set => SetProperty(ref nextDueDate, value);
+        }
 
-        public int? PaymentMethodId { get; set; }
+        private int? paymentMethodId;
+        public int? PaymentMethodId
+        {
+            get => paymentMethodId;
+            set => SetProperty(ref paymentMethodId, value);
+        }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        private DateTime createdAt = DateTime.Now;
+        public DateTime CreatedAt
+        {
+            get => createdAt;
+            set => SetProperty(ref createdAt, value);
+        }
 
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        private DateTime updatedAt = DateTime.Now;
+        public DateTime UpdatedAt
+        {
+            get => updatedAt;
+            set => SetProperty(ref updatedAt, value);
+        }
 
         public User? User { get; set; }
-
         public PaymentMethod? PaymentMethod { get; set; }
     }
 }

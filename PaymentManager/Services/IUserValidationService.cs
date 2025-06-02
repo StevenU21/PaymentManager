@@ -1,9 +1,7 @@
-﻿using PaymentManager.Models;
-
-namespace PaymentManager.Services
+﻿namespace PaymentManager.Services
 {
-    public interface IUserValidationService
+    public interface IValidationService<T>
     {
-        Task<(bool IsValid, string? ErrorMessage)> ValidateAsync(User user, bool isEdit = false);
+        Task<(bool IsValid, string? ErrorMessage)> ValidateAsync(T entity, bool isEdit = false);
     }
 }

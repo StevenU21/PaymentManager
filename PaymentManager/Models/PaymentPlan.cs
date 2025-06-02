@@ -1,24 +1,52 @@
-﻿
-namespace PaymentManager.Models
+﻿namespace PaymentManager.Models
 {
-    public class PaymentPlan
+    public class PaymentPlan : ObservableObject
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        private int userId;
+        public int UserId
+        {
+            get => userId;
+            set => SetProperty(ref userId, value);
+        }
 
-        public int PaymentTypeId { get; set; }
+        private int paymentTypeId;
+        public int PaymentTypeId
+        {
+            get => paymentTypeId;
+            set => SetProperty(ref paymentTypeId, value);
+        }
 
-        public byte? DayOfMonth { get; set; }
+        private byte? dayOfMonth;
+        public byte? DayOfMonth
+        {
+            get => dayOfMonth;
+            set => SetProperty(ref dayOfMonth, value);
+        }
 
-        public decimal Amount { get; set; }
+        private decimal amount;
+        public decimal Amount
+        {
+            get => amount;
+            set => SetProperty(ref amount, value);
+        }
 
-        public bool Active { get; set; } = true;
+        private bool active = true;
+        public bool Active
+        {
+            get => active;
+            set => SetProperty(ref active, value);
+        }
 
-        public DateTime StartDate { get; set; }
+        private DateTime startDate;
+        public DateTime StartDate
+        {
+            get => startDate;
+            set => SetProperty(ref startDate, value);
+        }
 
         public User? User { get; set; }
-
         public PaymentType? PaymentType { get; set; }
     }
 }

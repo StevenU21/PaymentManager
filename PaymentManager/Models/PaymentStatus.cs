@@ -1,18 +1,37 @@
-﻿
-namespace PaymentManager.Models
+﻿namespace PaymentManager.Models
 {
-    public class PaymentStatus
+    public class PaymentStatus : ObservableObject
     {
         public int UserId { get; set; }
 
-        public DateTime? LastPaymentDate { get; set; }
+        private DateTime? lastPaymentDate;
+        public DateTime? LastPaymentDate
+        {
+            get => lastPaymentDate;
+            set => SetProperty(ref lastPaymentDate, value);
+        }
 
-        public DateTime? NextDueDate { get; set; }
+        private DateTime? nextDueDate;
+        public DateTime? NextDueDate
+        {
+            get => nextDueDate;
+            set => SetProperty(ref nextDueDate, value);
+        }
 
-        public string Status { get; set; } = "On Time"; // SQLite no admite enum directamente
+        private string status = "On Time";
+        public string Status
+        {
+            get => status;
+            set => SetProperty(ref status, value);
+        }
 
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        private DateTime updatedAt = DateTime.Now;
+        public DateTime UpdatedAt
+        {
+            get => updatedAt;
+            set => SetProperty(ref updatedAt, value);
+        }
 
-        public User? User { get; set; } 
+        public User? User { get; set; }
     }
 }

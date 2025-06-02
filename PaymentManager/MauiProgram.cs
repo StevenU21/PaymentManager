@@ -2,6 +2,8 @@
 using PaymentManager.Services;
 using PaymentManager.Data; 
 using CommunityToolkit.Maui;
+using PaymentManager.Models; 
+using PaymentManager.Validators; 
 
 namespace PaymentManager
 {
@@ -22,7 +24,11 @@ namespace PaymentManager
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddSingleton<IUserValidationService, UserValidationService>();
+            builder.Services.AddScoped<IValidationService<User>>(provider =>
+            {
+                var userService = provider.GetRequiredService<IUserService>();
+                return new ValidationService<User>(userService, new UserValidator(new List<User>()));
+            });
             builder.Services.AddSingleton<IMessagingService, MessagingService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
