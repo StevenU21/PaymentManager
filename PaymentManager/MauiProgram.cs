@@ -2,8 +2,9 @@
 using PaymentManager.Services;
 using PaymentManager.Data; 
 using CommunityToolkit.Maui;
-using PaymentManager.Models; 
+using PaymentManager.Models;
 using PaymentManager.Validators; 
+using System.IO;
 
 namespace PaymentManager
 {
@@ -30,9 +31,14 @@ namespace PaymentManager
                 return new ValidationService<User>(userService, new UserValidator(new List<User>()));
             });
             builder.Services.AddSingleton<IMessagingService, MessagingService>();
+
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlite("Data Source=app.db"); 
+                string dbPath = Path.Combine(
+                    FileSystem.AppDataDirectory, 
+                    "app.db"
+                );
+                options.UseSqlite($"Data Source={dbPath}");
             });
             builder.Services.AddSingleton<AppShell>();
 
