@@ -4,7 +4,6 @@ using PaymentManager.Data;
 using CommunityToolkit.Maui;
 using PaymentManager.Models;
 using PaymentManager.Validators; 
-using System.IO;
 
 namespace PaymentManager
 {
@@ -26,6 +25,7 @@ namespace PaymentManager
                 });
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
+            builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IValidationService<User>>(provider =>
             {
                 var userService = provider.GetRequiredService<IUserService>();
@@ -36,6 +36,12 @@ namespace PaymentManager
             {
                 var paymentTypeService = provider.GetRequiredService<IPaymentTypeService>();
                 return new ValidationService<PaymentType>(paymentTypeService, new PaymentTypeValidator(new List<PaymentType>()));
+            });
+
+            builder.Services.AddScoped<IValidationService<PaymentMethod>>(provider =>
+            {
+                var paymentMethodService = provider.GetRequiredService<IPaymentMethodService>();
+                return new ValidationService<PaymentMethod>(paymentMethodService, new PaymentMethodValidator(new List<PaymentMethod>()));
             });
 
             builder.Services.AddSingleton<IMessagingService, MessagingService>();

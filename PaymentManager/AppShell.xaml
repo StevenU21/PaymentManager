@@ -22,4 +22,8 @@
         <ShellContent Route="paymentTypes" ContentTemplate="{DataTemplate views:PaymentTypePage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Metodos de Pago" Icon="metodos_pagos.png">
+        <ShellContent Route="paymentMethods" ContentTemplate="{DataTemplate views:PaymentMethodPage}" />
+    </FlyoutItem>
+
 </Shell>
