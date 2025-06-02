@@ -7,20 +7,15 @@
     xmlns:views="clr-namespace:PaymentManager.Views"
     Title="PaymentManager">
 
-    <TabBar>
-        <Tab Title="Inicio" Icon="home.png">
-            <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate local:MainPage}"
-                Route="MainPage" />
-        </Tab>
-        <Tab Title="Usuarios" Icon="users.png">
-            <ShellContent
-                Title="Usuarios"
-                ContentTemplate="{DataTemplate views:UserPage}"
-                Route="users" />
-        </Tab>
-        <!-- Agrega más tabs aquí si lo necesitas -->
-    </TabBar>
+    <FlyoutItem Title="Inicio" Route="MainPage">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Usuarios" Icon="users.png">
+        <ShellContent Route="users" ContentTemplate="{DataTemplate views:UserPage}" />
+    </FlyoutItem>
 
 </Shell>
