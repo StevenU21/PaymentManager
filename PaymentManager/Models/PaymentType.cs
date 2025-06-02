@@ -11,8 +11,8 @@
             set => SetProperty(ref name, value);
         }
 
-        private ushort intervalDays;
-        public ushort IntervalDays
+        private int intervalDays;
+        public int IntervalDays
         {
             get => intervalDays;
             set => SetProperty(ref intervalDays, value);

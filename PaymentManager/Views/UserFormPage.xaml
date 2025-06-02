@@ -7,7 +7,7 @@
 
        <ScrollView>
               <VerticalStackLayout Padding="10"
-                            Spacing="10">
+                                   Spacing="10">
                      <!-- Botón Cancelar arriba a la derecha -->
                      <Button Text="Cancelar"
                              HorizontalOptions="End"

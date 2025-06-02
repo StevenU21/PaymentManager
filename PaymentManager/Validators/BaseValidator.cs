@@ -24,12 +24,13 @@ namespace PaymentManager.Validators
             {
                 var field = kvp.Key;
                 var parts = kvp.Value.Split('|');
-                var prop   = typeof(T).GetProperty(field);
-                var value  = prop != null ? prop.GetValue(model) as string : null;
+                var prop = typeof(T).GetProperty(field);
+                var rawValue = prop != null ? prop.GetValue(model) : null;
+                var value = rawValue?.ToString();
 
                 foreach (var rulePart in parts)
                 {
-                    var seg = rulePart.Split(new[] {':'}, 2);
+                    var seg = rulePart.Split(new[] { ':' }, 2);
                     var name = seg[0];
                     var param = seg.Length > 1 ? seg[1] : null;
 
@@ -72,7 +73,15 @@ namespace PaymentManager.Validators
                     var p = typeof(T).GetProperty(param);
                     if (p == null) return true;
                     return !_items.Any(x =>
-                        string.Equals(p.GetValue(x) as string ?? string.Empty, value ?? string.Empty, StringComparison.OrdinalIgnoreCase));
+                        string.Equals(p.GetValue(x)?.ToString() ?? string.Empty, value ?? string.Empty, StringComparison.OrdinalIgnoreCase));
+                case "integer":
+                    return int.TryParse(value, out _);
+                case "float":
+                    return float.TryParse(value, out _);
+                case "date":
+                    return DateTime.TryParse(value, out var dt) && dt.TimeOfDay == TimeSpan.Zero;
+                case "datetime":
+                    return DateTime.TryParse(value, out _);
                 default:
                     return true;
             }

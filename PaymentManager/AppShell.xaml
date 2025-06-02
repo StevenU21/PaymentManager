@@ -18,4 +18,8 @@
         <ShellContent Route="users" ContentTemplate="{DataTemplate views:UserPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Tipo de Pagos" Icon="tipos_pagos.png">
+        <ShellContent Route="paymentTypes" ContentTemplate="{DataTemplate views:PaymentTypePage}" />
+    </FlyoutItem>
+
 </Shell>

@@ -25,11 +25,19 @@ namespace PaymentManager
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
             builder.Services.AddScoped<IValidationService<User>>(provider =>
             {
                 var userService = provider.GetRequiredService<IUserService>();
                 return new ValidationService<User>(userService, new UserValidator(new List<User>()));
             });
+
+            builder.Services.AddScoped<IValidationService<PaymentType>>(provider =>
+            {
+                var paymentTypeService = provider.GetRequiredService<IPaymentTypeService>();
+                return new ValidationService<PaymentType>(paymentTypeService, new PaymentTypeValidator(new List<PaymentType>()));
+            });
+
             builder.Services.AddSingleton<IMessagingService, MessagingService>();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
