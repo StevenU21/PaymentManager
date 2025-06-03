@@ -47,7 +47,7 @@ namespace PaymentManager.ViewModels
                 {
                     selectedPaymentPlan = value;
                     Payment.PaymentPlanId = value.Id;
-                    _ = SetNextDueDateFromPlanAsync(value);
+                    SetNextDueDateFromPlan(value);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace PaymentManager.ViewModels
             _navigation = navigation ?? throw new ArgumentNullException(nameof(navigation));
             Payment = new Payment
             {
-                PaymentDate = DateTime.Now // Asigna la fecha actual por defecto
+                PaymentDate = DateTime.Now 
             };
             SaveCommand = new Command(async () => await SaveAsync());
             CancelCommand = new Command(async () => await _navigation.PopModalAsync());
@@ -134,78 +134,25 @@ namespace PaymentManager.ViewModels
             if (Payment.PaymentMethodId != null)
                 selectedPaymentMethod = PaymentMethods.FirstOrDefault(pm => pm.Id == Payment.PaymentMethodId);
 
-            // Calcular NextDueDate si hay un plan seleccionado
             if (SelectedPaymentPlan != null)
             {
-                await SetNextDueDateFromPlanAsync(SelectedPaymentPlan);
+                SetNextDueDateFromPlan(SelectedPaymentPlan);
             }
         }
 
-        private async Task SetNextDueDateFromPlanAsync(PaymentPlan plan)
+        private void SetNextDueDateFromPlan(PaymentPlan plan)
         {
-            // Usar DayOfMonth del PaymentPlan para calcular el próximo vencimiento
-            if (plan.DayOfMonth.HasValue)
-            {
-                var today = DateTime.Now.Date;
-                var dayOfMonth = plan.DayOfMonth.Value.Day;
-
-                var nextMonth = today.Month;
-                var nextYear = today.Year;
-
-                // Si el día de pago de este mes ya pasó, ir al siguiente mes
-                if (today.Day >= dayOfMonth)
-                {
-                    nextMonth++;
-                    if (nextMonth > 12)
-                    {
-                        nextMonth = 1;
-                        nextYear++;
-                    }
-                }
-
-                // Calcular el número de periodos pagados (meses adelantados)
-                int periodsPaid = Payment.PeriodsPaid > 0 ? Payment.PeriodsPaid : 1;
-                nextMonth += (periodsPaid - 1);
-
-                // Ajustar año y mes si se pasa de diciembre
-                while (nextMonth > 12)
-                {
-                    nextMonth -= 12;
-                    nextYear++;
-                }
-
-                // Asegura que el día no exceda el número de días del mes
-                var daysInNextMonth = DateTime.DaysInMonth(nextYear, nextMonth);
-                var dueDay = Math.Min(dayOfMonth, daysInNextMonth);
-
-                Payment.NextDueDate = new DateTime(nextYear, nextMonth, dueDay, Payment.PaymentDate.Hour, Payment.PaymentDate.Minute, Payment.PaymentDate.Second);
-            }
-            else
-            {
-                Payment.NextDueDate = default;
-            }
+            var nextDueDate = _paymentService.CalculateNextDueDate(Payment, plan);
+            Payment.NextDueDate = nextDueDate ?? default;
         }
 
         private async Task SaveAsync()
         {
-            // Recalcula NextDueDate antes de guardar
             if (SelectedPaymentPlan != null)
             {
-                await SetNextDueDateFromPlanAsync(SelectedPaymentPlan);
+                SetNextDueDateFromPlan(SelectedPaymentPlan);
             }
 
-            // DEBUG: Imprimir los datos que se intentan guardar
-            System.Diagnostics.Debug.WriteLine("=== DEBUG: Intentando guardar pago ===");
-            System.Diagnostics.Debug.WriteLine($"UserId: {Payment.UserId}");
-            System.Diagnostics.Debug.WriteLine($"PaymentPlanId: {Payment.PaymentPlanId}");
-            System.Diagnostics.Debug.WriteLine($"PaymentMethodId: {Payment.PaymentMethodId}");
-            System.Diagnostics.Debug.WriteLine($"PaymentDate: {Payment.PaymentDate:yyyy-MM-dd HH:mm:ss}");
-            System.Diagnostics.Debug.WriteLine($"NextDueDate: {Payment.NextDueDate:yyyy-MM-dd HH:mm:ss}");
-            System.Diagnostics.Debug.WriteLine($"AmountPaid: {Payment.AmountPaid}");
-            System.Diagnostics.Debug.WriteLine($"PeriodsPaid: {Payment.PeriodsPaid}");
-            System.Diagnostics.Debug.WriteLine("===============================");
-
-            // Validar que NextDueDate sea válido y que PaymentDate también lo sea
             if (Payment.NextDueDate == default || Payment.NextDueDate < new DateTime(2000, 1, 1))
             {
                 await _messagingService.ShowMessageAsync("Error", "La fecha de próximo vencimiento (NextDueDate) no es válida.");
@@ -217,7 +164,6 @@ namespace PaymentManager.ViewModels
                 return;
             }
 
-            // Validar que el plan y el día de pago existen
             if (SelectedPaymentPlan == null || !SelectedPaymentPlan.DayOfMonth.HasValue)
             {
                 await _messagingService.ShowMessageAsync("Error", "Debe seleccionar un plan de pago válido con día de pago.");

@@ -44,7 +44,7 @@
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding PaymentMethod.Name, StringFormat='Método: {0}'}"
+                                <Label Text="{Binding PaymentMethod.Name, StringFormat='Método de Pago: {0}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
