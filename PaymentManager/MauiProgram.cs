@@ -27,6 +27,13 @@ namespace PaymentManager
             builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IPaymentPlanService, PaymentPlanService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+            builder.Services.AddScoped<IValidationService<Payment>>(provider =>
+            {
+                var paymentService = provider.GetRequiredService<IPaymentService>();
+                return new ValidationService<Payment>(paymentService, new PaymentValidator(new List<Payment>()));
+            });
             builder.Services.AddScoped<IValidationService<User>>(provider =>
             {
                 var userService = provider.GetRequiredService<IUserService>();
@@ -57,7 +64,7 @@ namespace PaymentManager
             {
                 string dbPath = Path.Combine(
                     FileSystem.AppDataDirectory, 
-                    "app.db"
+                    "payment.db"
                 );
                 options.UseSqlite($"Data Source={dbPath}");
             });

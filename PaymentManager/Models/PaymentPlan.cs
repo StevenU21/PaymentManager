@@ -48,5 +48,6 @@
 
         public User? User { get; set; }
         public PaymentType? PaymentType { get; set; }
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

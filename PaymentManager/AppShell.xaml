@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:PaymentManager"
     xmlns:views="clr-namespace:PaymentManager.Views"
-    Title="PaymentManager">
+    Title="PaymentManager"
+    >
 
     <FlyoutItem Title="Inicio" Route="MainPage">
         <ShellContent
@@ -28,6 +29,10 @@
 
     <FlyoutItem Title="Planes de Pago" Icon="planes_pagos.png">
         <ShellContent Route="paymentPlans" ContentTemplate="{DataTemplate views:PaymentPlanPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Pagos" Icon="pagos.png">
+        <ShellContent Route="payments" ContentTemplate="{DataTemplate views:PaymentPage}" />
     </FlyoutItem>
 
 </Shell>

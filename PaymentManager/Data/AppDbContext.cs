@@ -42,6 +42,13 @@ namespace PaymentManager.Data
                 .HasForeignKey(p => p.PaymentMethodId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Payment → PaymentPlan (muchos a uno, nullable)
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.PaymentPlan)
+                .WithMany(pp => pp.Payments)
+                .HasForeignKey(p => p.PaymentPlanId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             // PaymentPlan → User
             modelBuilder.Entity<PaymentPlan>()
                 .HasOne(pp => pp.User)
@@ -58,6 +65,5 @@ namespace PaymentManager.Data
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

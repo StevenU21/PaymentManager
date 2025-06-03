@@ -46,6 +46,14 @@
             set => SetProperty(ref paymentMethodId, value);
         }
 
+        private int? paymentPlanId;
+        public int? PaymentPlanId
+        {
+            get => paymentPlanId;
+            set => SetProperty(ref paymentPlanId, value);
+        }
+
+
         private DateTime createdAt = DateTime.Now;
         public DateTime CreatedAt
         {
@@ -62,5 +70,6 @@
 
         public User? User { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
+        public PaymentPlan? PaymentPlan { get; set; }
     }
 }
