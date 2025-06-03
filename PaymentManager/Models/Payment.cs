@@ -57,4 +57,4 @@
         public PaymentMethod? PaymentMethod { get; set; }
         public PaymentPlan? PaymentPlan { get; set; }
     }
-}
+}   

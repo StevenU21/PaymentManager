@@ -15,7 +15,8 @@
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="10" Spacing="10">
+        <VerticalStackLayout Padding="10"
+                             Spacing="10">
             <Button Text="Cancelar"
                     HorizontalOptions="End"
                     Margin="0,0,0,10"
@@ -41,7 +42,9 @@
                 </Border.Shadow>
 
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Usuario" TextColor="#FAFAFA" FontAttributes="Bold"/>
+                    <Label Text="Usuario"
+                           TextColor="#FAFAFA"
+                           FontAttributes="Bold"/>
                     <Picker ItemsSource="{Binding Users}"
                             ItemDisplayBinding="{Binding Name}"
                             SelectedItem="{Binding SelectedUser}"
@@ -49,37 +52,65 @@
                             TextColor="#FAFAFA"
                             BackgroundColor="#181818"/>
 
-                    <Label Text="Plan de Pago" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding PaymentPlans}"
-                            ItemDisplayBinding="{Binding Name}" 
-                            SelectedItem="{Binding SelectedPaymentPlan}"
-                            Title="Selecciona un plan"
-                            TextColor="#FAFAFA"
-                            BackgroundColor="#181818"/>
+                    <!-- Grid para Plan de Pago y Método de Pago -->
+                    <Grid ColumnDefinitions="*,*"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10">
+                        <Label Text="Plan de Pago"
+                               TextColor="#FAFAFA"
+                               FontAttributes="Bold"
+                               Grid.Column="0"/>
+                        <Label Text="Método de Pago"
+                               TextColor="#FAFAFA"
+                               FontAttributes="Bold"
+                               Grid.Column="1"/>
+                        <Picker ItemsSource="{Binding PaymentPlans}"
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding SelectedPaymentPlan}"
+                                Title="Selecciona"
+                                TextColor="#FAFAFA"
+                                BackgroundColor="#181818"
+                                Grid.Column="0"
+                                Grid.Row="1"/>
+                        <Picker ItemsSource="{Binding PaymentMethods}"
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding SelectedPaymentMethod}"
+                                Title="Selecciona"
+                                TextColor="#FAFAFA"
+                                BackgroundColor="#181818"
+                                Grid.Column="1"
+                                Grid.Row="1"/>
+                    </Grid>
 
-                    <Label Text="Método de Pago" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding PaymentMethods}"
-                            ItemDisplayBinding="{Binding Name}"
-                            SelectedItem="{Binding SelectedPaymentMethod}"
-                            Title="Selecciona un método"
-                            TextColor="#FAFAFA"
-                            BackgroundColor="#181818"/>
-
-                    <Label Text="Monto Pagado" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <Entry Placeholder="Monto"
-                           Text="{Binding Payment.AmountPaid, Converter={StaticResource StringToDecimalConverter}}"
-                           Keyboard="Numeric"
-                           TextColor="#FAFAFA"
-                           PlaceholderColor="#B0B0B0"
-                           BackgroundColor="#181818"/>
-
-                    <Label Text="Periodos Pagados" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <Entry Placeholder="Periodos"
-                           Text="{Binding Payment.PeriodsPaid, Converter={StaticResource StringToIntConverter}}"
-                           Keyboard="Numeric"
-                           TextColor="#FAFAFA"
-                           PlaceholderColor="#B0B0B0"
-                           BackgroundColor="#181818"/>
+                    <!-- Grid para Monto Pagado y Periodos Pagados -->
+                    <Grid ColumnDefinitions="*,*"
+                          RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10">
+                        <Label Text="Monto Pagado"
+                               TextColor="#FAFAFA"
+                               FontAttributes="Bold"
+                               Grid.Column="0"/>
+                        <Label Text="Periodos Pagados"
+                               TextColor="#FAFAFA"
+                               FontAttributes="Bold"
+                               Grid.Column="1"/>
+                        <Entry Placeholder="Monto"
+                               Text="{Binding Payment.AmountPaid, Converter={StaticResource StringToDecimalConverter}}"
+                               Keyboard="Numeric"
+                               TextColor="#FAFAFA"
+                               PlaceholderColor="#B0B0B0"
+                               BackgroundColor="#181818"
+                               Grid.Column="0"
+                               Grid.Row="1"/>
+                        <Entry Placeholder="Periodos"
+                               Text="{Binding Payment.PeriodsPaid, Converter={StaticResource StringToIntConverter}}"
+                               Keyboard="Numeric"
+                               TextColor="#FAFAFA"
+                               PlaceholderColor="#B0B0B0"
+                               BackgroundColor="#181818"
+                               Grid.Column="1"
+                               Grid.Row="1"/>
+                    </Grid>
 
                     <Button Text="Guardar"
                             Command="{Binding SaveCommand}"
@@ -89,6 +120,7 @@
                             FontAttributes="Bold"
                             HeightRequest="44"/>
                 </VerticalStackLayout>
+
             </Border>
         </VerticalStackLayout>
     </ScrollView>
