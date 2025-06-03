@@ -40,7 +40,7 @@
                                        FontAttributes="Bold"
                                        FontSize="16"
                                        TextColor="#FAFAFA"/>
-                                <Label Text="{Binding PaymentPlan.Amount, StringFormat='Plan: {0:C}'}"
+                                <Label Text="{Binding PaymentPlan.Name, StringFormat='Plan: {0:C}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
@@ -48,7 +48,7 @@
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding PaymentDate, StringFormat='Fecha: {0:dd/MM/yyyy}'}"
+                                <Label Text="{Binding PaymentDate, StringFormat='Fecha de Pago: {0:dd/MM/yyyy}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
