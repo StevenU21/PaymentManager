@@ -20,6 +20,6 @@ public partial class PaymentMethodPage : ContentPage
     {
         base.OnAppearing();
         if (BindingContext is PaymentMethodsViewModel vm)
-            vm.LoadPaymentMethodsCommand.Execute(null);
+            vm.LoadItemsCommand.Execute(null);
     }
 }

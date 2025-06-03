@@ -4,32 +4,25 @@ using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels
 {
-    public class UserFormViewModel
+    public class UserFormViewModel : BaseFormViewModel<User>
     {
-        private readonly IValidationService<User> _userValidationService;
-        private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
-        private readonly INavigation _navigation;
-        public event Action<User>? UserSaved;
 
-        public User User { get; set; }
-
-        public ICommand SaveCommand { get; }
-        public ICommand CancelCommand { get; }
+        public User User
+        {
+            get => Entity!;
+            set => Entity = value;
+        }
 
         public UserFormViewModel(
             IUserService userService,
             IValidationService<User> userValidationService,
             IMessagingService messagingService,
             INavigation navigation)
+            : base(userValidationService, messagingService, navigation)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _userValidationService = userValidationService ?? throw new ArgumentNullException(nameof(userValidationService));
-            _messagingService = messagingService ?? throw new ArgumentNullException(nameof(messagingService));
-            _navigation = navigation ?? throw new ArgumentNullException(nameof(navigation));
             User = new User();
-            SaveCommand = new Command(async () => await SaveAsync());
-            CancelCommand = new Command(async () => await _navigation.PopModalAsync());
         }
 
         public UserFormViewModel(
@@ -43,28 +36,14 @@ namespace PaymentManager.ViewModels
             User = user;
         }
 
-        private async Task SaveAsync()
+        protected override async Task SaveOrUpdateAsync()
         {
-            var (isValid, errorMessage) = await _userValidationService.ValidateAsync(User, User.Id != 0);
-
-            if (!isValid)
-            {
-                await _messagingService.ShowMessageAsync("Error", errorMessage ?? "Unknown error");
-                return;
-            }
-
             if (User.Id != 0)
-            {
                 await _userService.UpdateAsync(User);
-                UserSaved?.Invoke(User);
-            }
             else
-            {
                 await _userService.AddAsync(User);
-                UserSaved?.Invoke(User);
-            }
-
-            await _navigation.PopModalAsync();
         }
+
+        protected override bool GetIsEdit() => User.Id != 0;
     }
 }

@@ -20,6 +20,6 @@ public partial class UserPage : ContentPage
     {
         base.OnAppearing();
         if (BindingContext is UsersViewModel vm)
-            vm.LoadUsersCommand.Execute(null);
+            vm.LoadItemsCommand.Execute(null);
     }
 }

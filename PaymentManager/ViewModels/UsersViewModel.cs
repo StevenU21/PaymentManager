@@ -1,44 +1,38 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using PaymentManager.Models;
 using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels
 {
-    public class UsersViewModel
+    public class UsersViewModel : BaseListViewModel<User>
     {
         private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
         private readonly IValidationService<User> _userValidationService;
 
-        public ObservableCollection<User> Users { get; } = new ObservableCollection<User>();
-        public Command RegisterUserCommand { get; }
-        public Command<User> EditUserCommand { get; }
-        public Command<User> DeleteUserCommand { get; }
-        public Command LoadUsersCommand { get; }
-        public bool IsBusy { get; set; }
+        public ObservableCollection<User> Users => Items;
+        public ICommand RegisterUserCommand { get; }
+        public ICommand EditUserCommand { get; }
+        public ICommand DeleteUserCommand { get; }
 
         public UsersViewModel(
             IUserService userService,
             IValidationService<User> userValidationService,
             IMessagingService messagingService)
+            : base()
         {
             _userService = userService;
             _userValidationService = userValidationService;
             _messagingService = messagingService;
-            LoadUsersCommand = new Command(async () => await LoadUsersAsync());
             RegisterUserCommand = new Command(async () => await OpenRegisterModal());
             EditUserCommand = new Command<User>(async user => await OpenEditModal(user));
             DeleteUserCommand = new Command<User>(async user => await DeleteUserAsync(user));
         }
 
-        private async Task LoadUsersAsync()
+        protected override async Task<IEnumerable<User>> GetItemsAsync()
         {
-            IsBusy = true;
-            var users = await _userService.GetAllAsync();
-            Users.Clear();
-            foreach (var user in users)
-                Users.Add(user);
-            IsBusy = false;
+            return await _userService.GetAllAsync();
         }
 
         private async Task OpenRegisterModal()
@@ -50,7 +44,7 @@ namespace PaymentManager.ViewModels
             if (mainPage?.Navigation != null)
             {
                 var viewModel = new UserFormViewModel(_userService, _userValidationService, _messagingService, mainPage.Navigation);
-                viewModel.UserSaved += user =>
+                viewModel.EntitySaved += user =>
                 {
                     Users.Add(user);
                 };
@@ -69,7 +63,7 @@ namespace PaymentManager.ViewModels
             if (mainPage?.Navigation != null)
             {
                 var viewModel = new UserFormViewModel(user, _userService, _userValidationService, _messagingService, mainPage.Navigation);
-                viewModel.UserSaved += updatedUser =>
+                viewModel.EntitySaved += updatedUser =>
                 {
                     var existing = Users.FirstOrDefault(u => u.Id == updatedUser.Id);
                     if (existing != null)

@@ -5,40 +5,35 @@ using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels
 {
-    public class PaymentPlansViewModel
+    public class PaymentPlansViewModel : BaseListViewModel<PaymentPlan>
     {
         private readonly IMessagingService _messagingService;
         private readonly IPaymentPlanService _paymentPlanService;
         private readonly IValidationService<PaymentPlan> _paymentPlanValidationService;
-        public ObservableCollection<PaymentPlan> PaymentPlans { get; } = new ObservableCollection<PaymentPlan>();
+
+        public ObservableCollection<PaymentPlan> PaymentPlans => Items;
+
         public ICommand RegisterPaymentPlanCommand { get; }
         public ICommand EditPaymentPlanCommand { get; }
         public ICommand DeletePaymentPlanCommand { get; }
-        public ICommand LoadPaymentPlansCommand { get; }
-        public bool IsBusy { get; set; }
 
         public PaymentPlansViewModel(
             IPaymentPlanService paymentPlanService,
             IValidationService<PaymentPlan> paymentPlanValidationService,
             IMessagingService messagingService)
+            : base()
         {
             _paymentPlanService = paymentPlanService;
             _paymentPlanValidationService = paymentPlanValidationService;
             _messagingService = messagingService;
-            LoadPaymentPlansCommand = new Command(async () => await LoadPaymentPlansAsync());
             RegisterPaymentPlanCommand = new Command(async () => await OpenRegisterModal());
             EditPaymentPlanCommand = new Command<PaymentPlan>(async plan => await OpenEditModal(plan));
             DeletePaymentPlanCommand = new Command<PaymentPlan>(async plan => await DeletePaymentPlanAsync(plan));
         }
 
-        private async Task LoadPaymentPlansAsync()
+        protected override async Task<IEnumerable<PaymentPlan>> GetItemsAsync()
         {
-            IsBusy = true;
-            var plans = await _paymentPlanService.GetAllAsync();
-            PaymentPlans.Clear();
-            foreach (var plan in plans)
-                PaymentPlans.Add(plan);
-            IsBusy = false;
+            return await _paymentPlanService.GetAllAsync();
         }
 
         private async Task OpenRegisterModal()
@@ -54,7 +49,7 @@ namespace PaymentManager.ViewModels
                     _paymentPlanValidationService,
                     _messagingService,
                     mainPage.Navigation);
-                viewModel.PaymentPlanSaved += plan =>
+                viewModel.EntitySaved += plan =>
                 {
                     PaymentPlans.Add(plan);
                 };
@@ -78,7 +73,7 @@ namespace PaymentManager.ViewModels
                     _paymentPlanValidationService,
                     _messagingService,
                     mainPage.Navigation);
-                viewModel.PaymentPlanSaved += updated =>
+                viewModel.EntitySaved += updated =>
                 {
                     var existing = PaymentPlans.FirstOrDefault(p => p.Id == updated.Id);
                     if (existing != null)

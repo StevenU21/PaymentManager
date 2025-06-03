@@ -5,41 +5,35 @@ using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels
 {
-    public class PaymentMethodsViewModel
+    public class PaymentMethodsViewModel : BaseListViewModel<PaymentMethod>
     {
         private readonly IMessagingService _messagingService;
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IValidationService<PaymentMethod> _paymentMethodValidationService;
 
-        public ObservableCollection<PaymentMethod> PaymentMethods { get; } = new ObservableCollection<PaymentMethod>();
+        public ObservableCollection<PaymentMethod> PaymentMethods => Items;
+
         public ICommand RegisterPaymentMethodCommand { get; }
         public ICommand EditPaymentMethodCommand { get; }
         public ICommand DeletePaymentMethodCommand { get; }
-        public ICommand LoadPaymentMethodsCommand { get; }
-        public bool IsBusy { get; set; }
 
         public PaymentMethodsViewModel(
             IPaymentMethodService paymentMethodService,
             IValidationService<PaymentMethod> paymentMethodValidationService,
             IMessagingService messagingService)
+            : base()
         {
             _paymentMethodService = paymentMethodService;
             _paymentMethodValidationService = paymentMethodValidationService;
             _messagingService = messagingService;
-            LoadPaymentMethodsCommand = new Command(async () => await LoadPaymentMethodsAsync());
             RegisterPaymentMethodCommand = new Command(async () => await OpenRegisterModal());
             EditPaymentMethodCommand = new Command<PaymentMethod>(async pm => await OpenEditModal(pm));
             DeletePaymentMethodCommand = new Command<PaymentMethod>(async pm => await DeletePaymentMethodAsync(pm));
         }
 
-        private async Task LoadPaymentMethodsAsync()
+        protected override async Task<IEnumerable<PaymentMethod>> GetItemsAsync()
         {
-            IsBusy = true;
-            var methods = await _paymentMethodService.GetAllAsync();
-            PaymentMethods.Clear();
-            foreach (var pm in methods)
-                PaymentMethods.Add(pm);
-            IsBusy = false;
+            return await _paymentMethodService.GetAllAsync();
         }
 
         private async Task OpenRegisterModal()
@@ -51,7 +45,7 @@ namespace PaymentManager.ViewModels
             if (mainPage?.Navigation != null)
             {
                 var viewModel = new PaymentMethodFormViewModel(_paymentMethodService, _paymentMethodValidationService, _messagingService, mainPage.Navigation);
-                viewModel.PaymentMethodSaved += pm =>
+                viewModel.EntitySaved += pm =>
                 {
                     PaymentMethods.Add(pm);
                 };
@@ -70,7 +64,7 @@ namespace PaymentManager.ViewModels
             if (mainPage?.Navigation != null)
             {
                 var viewModel = new PaymentMethodFormViewModel(paymentMethod, _paymentMethodService, _paymentMethodValidationService, _messagingService, mainPage.Navigation);
-                viewModel.PaymentMethodSaved += updated =>
+                viewModel.EntitySaved += updated =>
                 {
                     var existing = PaymentMethods.FirstOrDefault(pm => pm.Id == updated.Id);
                     if (existing != null)

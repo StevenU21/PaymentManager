@@ -5,19 +5,12 @@ using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels
 {
-    public class PaymentFormViewModel
+    public class PaymentFormViewModel : BaseFormViewModel<Payment>
     {
-        private readonly IValidationService<Payment> _paymentValidationService;
-        private readonly IMessagingService _messagingService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
         private readonly IPaymentPlanService _paymentPlanService;
         private readonly IPaymentMethodService _paymentMethodService;
-        private readonly INavigation _navigation;
-
-        public event Action<Payment>? PaymentSaved;
-
-        public Payment Payment { get; set; }
 
         public ObservableCollection<User> Users { get; } = new();
         public ObservableCollection<PaymentPlan> PaymentPlans { get; } = new();
@@ -66,8 +59,11 @@ namespace PaymentManager.ViewModels
             }
         }
 
-        public ICommand SaveCommand { get; }
-        public ICommand CancelCommand { get; }
+        public Payment Payment
+        {
+            get => Entity!;
+            set => Entity = value;
+        }
 
         public PaymentFormViewModel(
             IPaymentService paymentService,
@@ -77,21 +73,17 @@ namespace PaymentManager.ViewModels
             IPaymentPlanService paymentPlanService,
             IPaymentMethodService paymentMethodService,
             INavigation navigation
-          )
+        )
+            : base(paymentValidationService, messagingService, navigation)
         {
             _paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
-            _paymentValidationService = paymentValidationService ?? throw new ArgumentNullException(nameof(paymentValidationService));
-            _messagingService = messagingService ?? throw new ArgumentNullException(nameof(messagingService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _paymentPlanService = paymentPlanService ?? throw new ArgumentNullException(nameof(paymentPlanService));
             _paymentMethodService = paymentMethodService ?? throw new ArgumentNullException(nameof(paymentMethodService));
-            _navigation = navigation ?? throw new ArgumentNullException(nameof(navigation));
             Payment = new Payment
             {
-                PaymentDate = DateTime.Now 
+                PaymentDate = DateTime.Now
             };
-            SaveCommand = new Command(async () => await SaveAsync());
-            CancelCommand = new Command(async () => await _navigation.PopModalAsync());
             LoadCombos();
         }
 
@@ -104,7 +96,7 @@ namespace PaymentManager.ViewModels
             IPaymentPlanService paymentPlanService,
             IPaymentMethodService paymentMethodService,
             INavigation navigation
-          )
+        )
             : this(paymentService, paymentValidationService, messagingService, userService, paymentPlanService, paymentMethodService, navigation)
         {
             Payment = payment;
@@ -146,7 +138,7 @@ namespace PaymentManager.ViewModels
             Payment.NextDueDate = nextDueDate ?? default;
         }
 
-        private async Task SaveAsync()
+        protected override async Task SaveAsync()
         {
             if (SelectedPaymentPlan != null)
             {
@@ -170,26 +162,17 @@ namespace PaymentManager.ViewModels
                 return;
             }
 
-            var (isValid, errorMessage) = await _paymentValidationService.ValidateAsync(Payment, Payment.Id != 0);
-
-            if (!isValid)
-            {
-                await _messagingService.ShowMessageAsync("Error", errorMessage ?? "Unknown error");
-                return;
-            }
-
-            if (Payment.Id != 0)
-            {
-                await _paymentService.UpdateAsync(Payment);
-                PaymentSaved?.Invoke(Payment);
-            }
-            else
-            {
-                await _paymentService.AddAsync(Payment);
-                PaymentSaved?.Invoke(Payment);
-            }
-
-            await _navigation.PopModalAsync();
+            await base.SaveAsync();
         }
+
+        protected override async Task SaveOrUpdateAsync()
+        {
+            if (Payment.Id != 0)
+                await _paymentService.UpdateAsync(Payment);
+            else
+                await _paymentService.AddAsync(Payment);
+        }
+
+        protected override bool GetIsEdit() => Payment.Id != 0;
     }
 }

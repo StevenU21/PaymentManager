@@ -5,7 +5,7 @@
     
     namespace PaymentManager.ViewModels
     {
-        public class PaymentsViewModel
+        public class PaymentsViewModel : BaseListViewModel<Payment>
         {
             private readonly IMessagingService _messagingService;
             private readonly IPaymentService _paymentService;
@@ -14,12 +14,11 @@
             private readonly IPaymentPlanService _paymentPlanService;
             private readonly IPaymentMethodService _paymentMethodService;
     
-            public ObservableCollection<Payment> Payments { get; } = new ObservableCollection<Payment>();
+            public ObservableCollection<Payment> Payments => Items;
+    
             public ICommand RegisterPaymentCommand { get; }
             public ICommand EditPaymentCommand { get; }
             public ICommand DeletePaymentCommand { get; }
-            public ICommand LoadPaymentsCommand { get; }
-            public bool IsBusy { get; set; }
     
             public PaymentsViewModel(
                 IPaymentService paymentService,
@@ -28,7 +27,7 @@
                 IUserService userService,
                 IPaymentPlanService paymentPlanService,
                 IPaymentMethodService paymentMethodService
-            )
+            ) : base()
             {
                 _paymentService = paymentService;
                 _paymentValidationService = paymentValidationService;
@@ -36,20 +35,14 @@
                 _userService = userService;
                 _paymentPlanService = paymentPlanService;
                 _paymentMethodService = paymentMethodService;
-                LoadPaymentsCommand = new Command(async () => await LoadPaymentsAsync());
                 RegisterPaymentCommand = new Command(async () => await OpenRegisterModal());
                 EditPaymentCommand = new Command<Payment>(async payment => await OpenEditModal(payment));
                 DeletePaymentCommand = new Command<Payment>(async payment => await DeletePaymentAsync(payment));
             }
     
-            private async Task LoadPaymentsAsync()
+            protected override async Task<IEnumerable<Payment>> GetItemsAsync()
             {
-                IsBusy = true;
-                var payments = await _paymentService.GetAllAsync();
-                Payments.Clear();
-                foreach (var payment in payments)
-                    Payments.Add(payment);
-                IsBusy = false;
+                return await _paymentService.GetAllAsync();
             }
     
             private async Task OpenRegisterModal()
@@ -69,7 +62,7 @@
                         _paymentMethodService,
                         mainPage.Navigation
                     );
-                    viewModel.PaymentSaved += payment =>
+                    viewModel.EntitySaved += payment =>
                     {
                         Payments.Add(payment);
                     };
@@ -97,7 +90,7 @@
                         _paymentMethodService,
                         mainPage.Navigation
                     );
-                    viewModel.PaymentSaved += updated =>
+                    viewModel.EntitySaved += updated =>
                     {
                         var existing = Payments.FirstOrDefault(p => p.Id == updated.Id);
                         if (existing != null)
