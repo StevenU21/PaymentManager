@@ -51,7 +51,7 @@
 
                     <Label Text="Plan de Pago" TextColor="#FAFAFA" FontAttributes="Bold"/>
                     <Picker ItemsSource="{Binding PaymentPlans}"
-                            ItemDisplayBinding="{Binding Amount}" 
+                            ItemDisplayBinding="{Binding Name}" 
                             SelectedItem="{Binding SelectedPaymentPlan}"
                             Title="Selecciona un plan"
                             TextColor="#FAFAFA"
@@ -64,9 +64,6 @@
                             Title="Selecciona un método"
                             TextColor="#FAFAFA"
                             BackgroundColor="#181818"/>
-
-                    <Label Text="Fecha de Pago" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <DatePicker Date="{Binding Payment.PaymentDate}" TextColor="#FAFAFA"/>
 
                     <Label Text="Monto Pagado" TextColor="#FAFAFA" FontAttributes="Bold"/>
                     <Entry Placeholder="Monto"
@@ -83,9 +80,6 @@
                            TextColor="#FAFAFA"
                            PlaceholderColor="#B0B0B0"
                            BackgroundColor="#181818"/>
-
-                    <Label Text="Próxima Fecha de Vencimiento" TextColor="#FAFAFA" FontAttributes="Bold"/>
-                    <DatePicker Date="{Binding Payment.NextDueDate}" TextColor="#FAFAFA"/>
 
                     <Button Text="Guardar"
                             Command="{Binding SaveCommand}"

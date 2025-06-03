@@ -4,22 +4,15 @@
     {
         public int Id { get; set; }
 
-        private int userId;
-        public int UserId
+        private string name = string.Empty;
+        public string Name
         {
-            get => userId;
-            set => SetProperty(ref userId, value);
+            get => name;
+            set => SetProperty(ref name, value);
         }
 
-        private int paymentTypeId;
-        public int PaymentTypeId
-        {
-            get => paymentTypeId;
-            set => SetProperty(ref paymentTypeId, value);
-        }
-
-        private byte? dayOfMonth;
-        public byte? DayOfMonth
+        private DateTime? dayOfMonth;
+        public DateTime? DayOfMonth
         {
             get => dayOfMonth;
             set => SetProperty(ref dayOfMonth, value);
@@ -38,16 +31,6 @@
             get => active;
             set => SetProperty(ref active, value);
         }
-
-        private DateTime startDate;
-        public DateTime StartDate
-        {
-            get => startDate;
-            set => SetProperty(ref startDate, value);
-        }
-
-        public User? User { get; set; }
-        public PaymentType? PaymentType { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     }
 }

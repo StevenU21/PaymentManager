@@ -10,9 +10,6 @@ namespace PaymentManager.ViewModels
         private readonly IMessagingService _messagingService;
         private readonly IPaymentPlanService _paymentPlanService;
         private readonly IValidationService<PaymentPlan> _paymentPlanValidationService;
-        private readonly IUserService _userService;
-        private readonly IPaymentTypeService _paymentTypeService;
-
         public ObservableCollection<PaymentPlan> PaymentPlans { get; } = new ObservableCollection<PaymentPlan>();
         public ICommand RegisterPaymentPlanCommand { get; }
         public ICommand EditPaymentPlanCommand { get; }
@@ -23,15 +20,11 @@ namespace PaymentManager.ViewModels
         public PaymentPlansViewModel(
             IPaymentPlanService paymentPlanService,
             IValidationService<PaymentPlan> paymentPlanValidationService,
-            IMessagingService messagingService,
-            IUserService userService,
-            IPaymentTypeService paymentTypeService)
+            IMessagingService messagingService)
         {
             _paymentPlanService = paymentPlanService;
             _paymentPlanValidationService = paymentPlanValidationService;
             _messagingService = messagingService;
-            _userService = userService;
-            _paymentTypeService = paymentTypeService;
             LoadPaymentPlansCommand = new Command(async () => await LoadPaymentPlansAsync());
             RegisterPaymentPlanCommand = new Command(async () => await OpenRegisterModal());
             EditPaymentPlanCommand = new Command<PaymentPlan>(async plan => await OpenEditModal(plan));
@@ -60,8 +53,6 @@ namespace PaymentManager.ViewModels
                     _paymentPlanService,
                     _paymentPlanValidationService,
                     _messagingService,
-                    _userService,
-                    _paymentTypeService,
                     mainPage.Navigation);
                 viewModel.PaymentPlanSaved += plan =>
                 {
@@ -86,21 +77,16 @@ namespace PaymentManager.ViewModels
                     _paymentPlanService,
                     _paymentPlanValidationService,
                     _messagingService,
-                    _userService,
-                    _paymentTypeService,
                     mainPage.Navigation);
                 viewModel.PaymentPlanSaved += updated =>
                 {
                     var existing = PaymentPlans.FirstOrDefault(p => p.Id == updated.Id);
                     if (existing != null)
                     {
+                        existing.Name = updated.Name;
                         existing.Amount = updated.Amount;
                         existing.DayOfMonth = updated.DayOfMonth;
-                        existing.StartDate = updated.StartDate;
                         existing.Active = updated.Active;
-                        existing.UserId = updated.UserId;
-                        existing.PaymentTypeId = updated.PaymentTypeId;
-                        // Agrega aquí los demás campos que quieras actualizar
                     }
                 };
                 formPage.BindingContext = viewModel;

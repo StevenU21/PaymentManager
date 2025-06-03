@@ -38,23 +38,15 @@
                                         Opacity="0.5"/>
                             </Border.Shadow>
                             <VerticalStackLayout>
-                                <Label Text="{Binding User.Name, StringFormat='Usuario: {0}'}"
+                                <Label Text="{Binding Name, StringFormat='Nombre: {0}'}"
                                        FontAttributes="Bold"
                                        FontSize="16"
                                        TextColor="#FAFAFA"/>
-                                <Label Text="{Binding PaymentType.Name, StringFormat='Tipo de Pago: {0}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <Label Text="{Binding DayOfMonth, StringFormat='Día de pago: {0}'}"
+                                <Label Text="{Binding DayOfMonth, StringFormat='Día de pago: {0:dd}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
                                 <Label Text="{Binding Amount, StringFormat='Monto: {0:C}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <Label Text="{Binding StartDate, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>

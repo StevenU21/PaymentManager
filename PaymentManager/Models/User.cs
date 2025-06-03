@@ -27,7 +27,6 @@
 
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public ICollection<PaymentPlan> PaymentPlans { get; set; } = new List<PaymentPlan>();
         public PaymentStatus? PaymentStatus { get; set; }
     }
 }

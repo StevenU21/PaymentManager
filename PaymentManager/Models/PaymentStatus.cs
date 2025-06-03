@@ -25,13 +25,6 @@
             set => SetProperty(ref status, value);
         }
 
-        private DateTime updatedAt = DateTime.Now;
-        public DateTime UpdatedAt
-        {
-            get => updatedAt;
-            set => SetProperty(ref updatedAt, value);
-        }
-
         public User? User { get; set; }
     }
 }

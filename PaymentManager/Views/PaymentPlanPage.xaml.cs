@@ -12,9 +12,7 @@ public partial class PaymentPlanPage : ContentPage
         BindingContext = new PaymentPlansViewModel(
             MauiProgram.Services.GetService<IPaymentPlanService>()!,
             MauiProgram.Services.GetService<IValidationService<PaymentPlan>>()!,
-            MauiProgram.Services.GetService<IMessagingService>()!,
-            MauiProgram.Services.GetService<IUserService>()!,
-            MauiProgram.Services.GetService<IPaymentTypeService>()!
+            MauiProgram.Services.GetService<IMessagingService>()!
         );
     }
 

@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentManager.Services;
-using PaymentManager.Data; 
+using PaymentManager.Data;
 using CommunityToolkit.Maui;
 using PaymentManager.Models;
-using PaymentManager.Validators; 
+using PaymentManager.Validators;
 
 namespace PaymentManager
 {
     public static class MauiProgram
     {
-        public static IServiceProvider Services { get; private set; } = null!; 
+        public static IServiceProvider Services { get; private set; } = null!;
 
         public static MauiApp CreateMauiApp()
         {
@@ -24,7 +24,6 @@ namespace PaymentManager
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IPaymentPlanService, PaymentPlanService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
@@ -38,12 +37,6 @@ namespace PaymentManager
             {
                 var userService = provider.GetRequiredService<IUserService>();
                 return new ValidationService<User>(userService, new UserValidator(new List<User>()));
-            });
-
-            builder.Services.AddScoped<IValidationService<PaymentType>>(provider =>
-            {
-                var paymentTypeService = provider.GetRequiredService<IPaymentTypeService>();
-                return new ValidationService<PaymentType>(paymentTypeService, new PaymentTypeValidator(new List<PaymentType>()));
             });
 
             builder.Services.AddScoped<IValidationService<PaymentMethod>>(provider =>
@@ -63,8 +56,8 @@ namespace PaymentManager
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 string dbPath = Path.Combine(
-                    FileSystem.AppDataDirectory, 
-                    "payment.db"
+                    FileSystem.AppDataDirectory,
+                    "user.db"
                 );
                 options.UseSqlite($"Data Source={dbPath}");
             });

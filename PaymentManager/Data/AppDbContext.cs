@@ -11,7 +11,6 @@ namespace PaymentManager.Data
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<PaymentPlan> PaymentPlans => Set<PaymentPlan>();
         public DbSet<PaymentStatus> PaymentStatuses => Set<PaymentStatus>();
-        public DbSet<PaymentType> PaymentTypes => Set<PaymentType>();
         public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -48,20 +47,6 @@ namespace PaymentManager.Data
                 .WithMany(pp => pp.Payments)
                 .HasForeignKey(p => p.PaymentPlanId)
                 .OnDelete(DeleteBehavior.SetNull);
-
-            // PaymentPlan → User
-            modelBuilder.Entity<PaymentPlan>()
-                .HasOne(pp => pp.User)
-                .WithMany(u => u.PaymentPlans)
-                .HasForeignKey(pp => pp.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // PaymentPlan → PaymentType
-            modelBuilder.Entity<PaymentPlan>()
-                .HasOne(pp => pp.PaymentType)
-                .WithMany(pt => pt.PaymentPlans)
-                .HasForeignKey(pp => pp.PaymentTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

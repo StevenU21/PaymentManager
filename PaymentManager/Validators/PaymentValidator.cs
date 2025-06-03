@@ -12,10 +12,10 @@ namespace PaymentManager.Validators
             return new Dictionary<string, string>
             {
                 ["UserId"] = "required|integer|min:1",
-                ["PaymentDate"] = "required|date",
+                ["PaymentDate"] = "date",
                 ["AmountPaid"] = "required|float",
                 ["PeriodsPaid"] = "required|integer|min:1",
-                ["NextDueDate"] = "required|date",
+                ["NextDueDate"] = "date",
                 ["PaymentMethodId"] = "required|integer|min:1",
                 ["PaymentPlanId"] = "required|integer|min:1"
             };
@@ -29,7 +29,6 @@ namespace PaymentManager.Validators
                 ["UserId.integer"] = "El usuario seleccionado no es válido.",
                 ["UserId.min"] = "Debe seleccionar un usuario.",
 
-                ["PaymentDate.required"] = "La fecha de pago es obligatoria.",
                 ["PaymentDate.date"] = "La fecha de pago no es válida.",
 
                 ["AmountPaid.required"] = "El monto pagado es obligatorio.",
@@ -40,7 +39,6 @@ namespace PaymentManager.Validators
                 ["PeriodsPaid.integer"] = "El número de periodos debe ser un número entero.",
                 ["PeriodsPaid.min"] = "Debe pagar al menos un periodo.",
 
-                ["NextDueDate.required"] = "La próxima fecha de vencimiento es obligatoria.",
                 ["NextDueDate.date"] = "La próxima fecha de vencimiento no es válida.",
 
                 ["PaymentMethodId.required"] = "El método de pago es obligatorio.",

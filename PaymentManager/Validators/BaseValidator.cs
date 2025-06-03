@@ -79,7 +79,7 @@ namespace PaymentManager.Validators
                 case "float":
                     return float.TryParse(value, out _);
                 case "date":
-                    return DateTime.TryParse(value, out var dt) && dt.TimeOfDay == TimeSpan.Zero;
+                    return DateTime.TryParse(value, out _);
                 case "datetime":
                     return DateTime.TryParse(value, out _);
                 default:

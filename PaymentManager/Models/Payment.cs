@@ -53,21 +53,6 @@
             set => SetProperty(ref paymentPlanId, value);
         }
 
-
-        private DateTime createdAt = DateTime.Now;
-        public DateTime CreatedAt
-        {
-            get => createdAt;
-            set => SetProperty(ref createdAt, value);
-        }
-
-        private DateTime updatedAt = DateTime.Now;
-        public DateTime UpdatedAt
-        {
-            get => updatedAt;
-            set => SetProperty(ref updatedAt, value);
-        }
-
         public User? User { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
         public PaymentPlan? PaymentPlan { get; set; }
