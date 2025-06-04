@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PaymentManager.Views.PaymentPage"
-             x:Name="PaymentPageRoot"
-             Title="Pagos"
+             x:Class="PaymentManager.Views.UserPaymentPlansPage"
+             x:Name="UserPaymentPlansPageRoot"
+             Title="Relaciones Usuario-Plan"
              BackgroundColor="#181818">
 
     <ScrollView>
-        <VerticalStackLayout Padding="10"
-                Spacing="10">
+        <VerticalStackLayout Padding="10" Spacing="10">
             <Button Text="Registrar"
                     HorizontalOptions="End"
                     Margin="0,0,0,10"
-                    Command="{Binding RegisterPaymentCommand}"
+                    Command="{Binding RegisterUserPaymentPlanCommand}"
                     BackgroundColor="#2D2D2D"
                     TextColor="#FAFAFA"
                     CornerRadius="8"
                     FontAttributes="Bold"
                     HeightRequest="44"/>
 
-            <CollectionView ItemsSource="{Binding Payments}"
-                    ItemsLayout="VerticalList">
+            <CollectionView ItemsSource="{Binding UserPaymentPlans}"
+                            ItemsLayout="VerticalList">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,12"
@@ -38,38 +37,34 @@
                                         Opacity="0.5"/>
                             </Border.Shadow>
                             <VerticalStackLayout>
-                                <Label Text="{Binding UserPaymentPlan.User.Name, StringFormat='Usuario: {0}'}"
+                                <Label Text="{Binding User.Name, StringFormat='Usuario: {0}'}"
                                        FontAttributes="Bold"
                                        FontSize="16"
                                        TextColor="#FAFAFA"/>
-                                <Label Text="{Binding UserPaymentPlan.PaymentPlan.Name, StringFormat='Plan: {0}'}"
+                                <Label Text="{Binding PaymentPlan.Name, StringFormat='Plan: {0}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding PaymentMethod.Name, StringFormat='Método de Pago: {0}'}"
+                                <Label Text="{Binding ShareAmount, StringFormat='Cuota: {0:C2}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding PaymentDate, StringFormat='Fecha de Pago: {0:dd/MM/yyyy}'}"
+                                <Label Text="{Binding JoinDate, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding AmountPaid, StringFormat='Pagado: {0:C}'}"
+                                <Label Text="{Binding Status, StringFormat='Estado: {0}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding PeriodsPaid, StringFormat='Periodos: {0}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <Label Text="{Binding NextDueDate, StringFormat='Próximo vencimiento: {0:dd/MM/yyyy}'}"
+                                <Label Text="{Binding Active, StringFormat='Activo: {0}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
                                 <HorizontalStackLayout Spacing="10"
-                                        Margin="0,10,0,0">
+                                                       Margin="0,10,0,0">
                                     <Button Text="Editar"
-                                            Command="{Binding BindingContext.EditPaymentCommand, Source={x:Reference PaymentPageRoot}}"
+                                            Command="{Binding BindingContext.EditUserPaymentPlanCommand, Source={x:Reference UserPaymentPlansPageRoot}}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#1976D2"
                                             TextColor="White"
@@ -78,7 +73,7 @@
                                             HeightRequest="36"
                                             WidthRequest="80"/>
                                     <Button Text="Eliminar"
-                                            Command="{Binding BindingContext.DeletePaymentCommand, Source={x:Reference PaymentPageRoot}}"
+                                            Command="{Binding BindingContext.DeleteUserPaymentPlanCommand, Source={x:Reference UserPaymentPlansPageRoot}}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#B00020"
                                             TextColor="White"

@@ -4,12 +4,15 @@ namespace PaymentManager.Services
 {
     public interface IPaymentService : IBaseService<Payment>
     {
+        Task<IEnumerable<UserPaymentPlan>> GetAllUserPaymentPlansAsync();
+
         public DateTime? CalculateNextDueDate(Payment payment, PaymentPlan plan)
         {
-            if (plan?.DayOfMonth == null) return null;
+            if (plan == null) return null;
 
             var today = DateTime.Now.Date;
-            var dayOfMonth = plan.DayOfMonth.Value.Day;
+            var dayOfMonth = plan.DayOfMonthToPay; 
+
             var nextMonth = today.Month;
             var nextYear = today.Year;
 

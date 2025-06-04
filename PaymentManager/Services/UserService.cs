@@ -8,10 +8,9 @@ namespace PaymentManager.Services
         public UserService(Data.AppDbContext context) : base(context) { }
 
         public override async Task<List<User>> GetAllAsync()
-            => await _context.Users.Include(u => u.PaymentStatus).ToListAsync();
+            => await _context.Users.ToListAsync();
 
         public override async Task<User?> GetByIdAsync(int id)
-            => await _context.Users.Include(u => u.PaymentStatus).FirstOrDefaultAsync(u => u.Id == id);
-
+            => await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 }

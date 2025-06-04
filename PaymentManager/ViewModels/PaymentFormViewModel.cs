@@ -12,35 +12,20 @@ namespace PaymentManager.ViewModels
         private readonly IPaymentPlanService _paymentPlanService;
         private readonly IPaymentMethodService _paymentMethodService;
 
-        public ObservableCollection<User> Users { get; } = new();
-        public ObservableCollection<PaymentPlan> PaymentPlans { get; } = new();
+        public ObservableCollection<UserPaymentPlan> UserPaymentPlans { get; } = new();
         public ObservableCollection<PaymentMethod> PaymentMethods { get; } = new();
 
-        private User? selectedUser;
-        public User? SelectedUser
+        private UserPaymentPlan? selectedUserPaymentPlan;
+        public UserPaymentPlan? SelectedUserPaymentPlan
         {
-            get => Users.FirstOrDefault(u => u.Id == Payment.UserId) ?? selectedUser;
+            get => UserPaymentPlans.FirstOrDefault(upp => upp.Id == Payment.UserPaymentPlanId) ?? selectedUserPaymentPlan;
             set
             {
                 if (value != null)
                 {
-                    selectedUser = value;
-                    Payment.UserId = value.Id;
-                }
-            }
-        }
-
-        private PaymentPlan? selectedPaymentPlan;
-        public PaymentPlan? SelectedPaymentPlan
-        {
-            get => PaymentPlans.FirstOrDefault(pp => pp.Id == Payment.PaymentPlanId) ?? selectedPaymentPlan;
-            set
-            {
-                if (value != null)
-                {
-                    selectedPaymentPlan = value;
-                    Payment.PaymentPlanId = value.Id;
-                    SetNextDueDateFromPlan(value);
+                    selectedUserPaymentPlan = value;
+                    Payment.UserPaymentPlanId = value.Id;
+                    SetNextDueDateFromUserPaymentPlan(value);
                 }
             }
         }
@@ -84,7 +69,6 @@ namespace PaymentManager.ViewModels
             {
                 PaymentDate = DateTime.Now
             };
-            LoadCombos();
         }
 
         public PaymentFormViewModel(
@@ -100,49 +84,40 @@ namespace PaymentManager.ViewModels
             : this(paymentService, paymentValidationService, messagingService, userService, paymentPlanService, paymentMethodService, navigation)
         {
             Payment = payment;
-            selectedUser = Users.FirstOrDefault(u => u.Id == payment.UserId);
-            selectedPaymentPlan = PaymentPlans.FirstOrDefault(pp => pp.Id == payment.PaymentPlanId);
-            selectedPaymentMethod = PaymentMethods.FirstOrDefault(pm => pm.Id == payment.PaymentMethodId);
         }
 
-        private async void LoadCombos()
+        public async Task LoadCombosAsync()
         {
-            var users = await _userService.GetAllAsync();
-            Users.Clear();
-            foreach (var u in users) Users.Add(u);
-
-            var plans = await _paymentPlanService.GetAllAsync();
-            PaymentPlans.Clear();
-            foreach (var p in plans) PaymentPlans.Add(p);
+            var userPaymentPlans = await _paymentService.GetAllUserPaymentPlansAsync();
+            UserPaymentPlans.Clear();
+            foreach (var upp in userPaymentPlans) UserPaymentPlans.Add(upp);
 
             var methods = await _paymentMethodService.GetAllAsync();
             PaymentMethods.Clear();
             foreach (var m in methods) PaymentMethods.Add(m);
 
-            if (Payment.UserId != 0)
-                selectedUser = Users.FirstOrDefault(u => u.Id == Payment.UserId);
-            if (Payment.PaymentPlanId != null)
-                selectedPaymentPlan = PaymentPlans.FirstOrDefault(pp => pp.Id == Payment.PaymentPlanId);
+            if (Payment.UserPaymentPlanId != 0)
+                selectedUserPaymentPlan = UserPaymentPlans.FirstOrDefault(upp => upp.Id == Payment.UserPaymentPlanId);
             if (Payment.PaymentMethodId != null)
                 selectedPaymentMethod = PaymentMethods.FirstOrDefault(pm => pm.Id == Payment.PaymentMethodId);
 
-            if (SelectedPaymentPlan != null)
+            if (SelectedUserPaymentPlan != null)
             {
-                SetNextDueDateFromPlan(SelectedPaymentPlan);
+                SetNextDueDateFromUserPaymentPlan(SelectedUserPaymentPlan);
             }
         }
 
-        private void SetNextDueDateFromPlan(PaymentPlan plan)
+        private void SetNextDueDateFromUserPaymentPlan(UserPaymentPlan userPaymentPlan)
         {
-            var nextDueDate = _paymentService.CalculateNextDueDate(Payment, plan);
+            var nextDueDate = _paymentService.CalculateNextDueDate(Payment, userPaymentPlan.PaymentPlan!);
             Payment.NextDueDate = nextDueDate ?? default;
         }
 
         protected override async Task SaveAsync()
         {
-            if (SelectedPaymentPlan != null)
+            if (SelectedUserPaymentPlan != null)
             {
-                SetNextDueDateFromPlan(SelectedPaymentPlan);
+                SetNextDueDateFromUserPaymentPlan(SelectedUserPaymentPlan);
             }
 
             if (Payment.NextDueDate == default || Payment.NextDueDate < new DateTime(2000, 1, 1))
@@ -153,12 +128,6 @@ namespace PaymentManager.ViewModels
             if (Payment.PaymentDate == default || Payment.PaymentDate < new DateTime(2000, 1, 1))
             {
                 await _messagingService.ShowMessageAsync("Error", "La fecha de pago no es válida.");
-                return;
-            }
-
-            if (SelectedPaymentPlan == null || !SelectedPaymentPlan.DayOfMonth.HasValue)
-            {
-                await _messagingService.ShowMessageAsync("Error", "Debe seleccionar un plan de pago válido con día de pago.");
                 return;
             }
 

@@ -79,9 +79,11 @@ namespace PaymentManager.ViewModels
                     if (existing != null)
                     {
                         existing.Name = updated.Name;
-                        existing.Amount = updated.Amount;
-                        existing.DayOfMonth = updated.DayOfMonth;
+                        existing.TotalAmount = updated.TotalAmount;
+                        existing.DayOfMonthToPay = updated.DayOfMonthToPay;
                         existing.Active = updated.Active;
+                        existing.IsRecurring = updated.IsRecurring;
+                        existing.TotalPeriods = updated.TotalPeriods;
                     }
                 };
                 formPage.BindingContext = viewModel;

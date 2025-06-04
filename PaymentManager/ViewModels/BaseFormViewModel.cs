@@ -1,9 +1,10 @@
 ﻿using System.Windows.Input;
 using PaymentManager.Services;
+using PaymentManager.Models;
 
 namespace PaymentManager.ViewModels
 {
-    public abstract class BaseFormViewModel<T>
+    public abstract class BaseFormViewModel<T> : ObservableObject
     {
         protected readonly IMessagingService _messagingService;
         protected readonly IValidationService<T> _validationService;

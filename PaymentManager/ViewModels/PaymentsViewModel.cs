@@ -100,8 +100,7 @@
                             existing.PeriodsPaid = updated.PeriodsPaid;
                             existing.NextDueDate = updated.NextDueDate;
                             existing.PaymentMethodId = updated.PaymentMethodId;
-                            existing.PaymentPlanId = updated.PaymentPlanId;
-                            existing.UserId = updated.UserId;
+                            existing.UserPaymentPlanId = updated.UserPaymentPlanId;
                             // Actualiza otros campos si es necesario
                         }
                     };

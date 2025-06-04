@@ -40,7 +40,7 @@
 
                 <VerticalStackLayout Spacing="15">
                     <!-- Nombre del plan -->
-                    <Label Text="Name"
+                    <Label Text="Nombre"
                            TextColor="#FAFAFA"
                            FontAttributes="Bold"/>
                     <Entry Placeholder="Ej: Crunchyroll"
@@ -57,12 +57,15 @@
                         </Grid.ColumnDefinitions>
 
                         <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="Día de pago"
+                            <Label Text="Día de pago (1-31)"
                                    TextColor="#FAFAFA"
                                    FontAttributes="Bold"/>
-                            <DatePicker Date="{Binding PaymentPlan.DayOfMonth}"
-                                        TextColor="#FAFAFA"
-                                        BackgroundColor="#181818"/>
+                            <Entry Placeholder="Ej: 15"
+                                   Text="{Binding PaymentPlan.DayOfMonthToPay}"
+                                   Keyboard="Numeric"
+                                   TextColor="#FAFAFA"
+                                   PlaceholderColor="#B0B0B0"
+                                   BackgroundColor="#181818"/>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Grid.Column="1" Spacing="2">
@@ -70,7 +73,34 @@
                                    TextColor="#FAFAFA"
                                    FontAttributes="Bold"/>
                             <Entry Placeholder="Monto"
-                                   Text="{Binding PaymentPlan.Amount, Converter={StaticResource StringToDecimalConverter}}"
+                                   Text="{Binding PaymentPlan.TotalAmount, Converter={StaticResource StringToDecimalConverter}}"
+                                   Keyboard="Numeric"
+                                   TextColor="#FAFAFA"
+                                   PlaceholderColor="#B0B0B0"
+                                   BackgroundColor="#181818"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Recurrente y Total de períodos -->
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Recurrente"
+                                   TextColor="#FAFAFA"
+                                   FontAttributes="Bold"/>
+                            <Switch IsToggled="{Binding PaymentPlan.IsRecurring}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Total de períodos"
+                                   TextColor="#FAFAFA"
+                                   FontAttributes="Bold"/>
+                            <Entry Placeholder="Ej: 12"
+                                   Text="{Binding PaymentPlan.TotalPeriods}"
                                    Keyboard="Numeric"
                                    TextColor="#FAFAFA"
                                    PlaceholderColor="#B0B0B0"

@@ -10,9 +10,19 @@ namespace PaymentManager.Services
         public override async Task<List<Payment>> GetAllAsync()
         {
             return await _context.Payments
-                .Include(p => p.User)
+                .Include(p => p.UserPaymentPlan)
+                    .ThenInclude(upp => upp.User)
+                .Include(p => p.UserPaymentPlan)
+                    .ThenInclude(upp => upp.PaymentPlan)
                 .Include(p => p.PaymentMethod)
-                .Include(p => p.PaymentPlan)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<UserPaymentPlan>> GetAllUserPaymentPlansAsync()
+        {
+            return await _context.UserPaymentPlans
+                .Include(upp => upp.User)
+                .Include(upp => upp.PaymentPlan)
                 .ToListAsync();
         }
     }

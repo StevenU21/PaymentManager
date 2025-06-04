@@ -42,16 +42,6 @@
                 </Border.Shadow>
 
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Usuario"
-                           TextColor="#FAFAFA"
-                           FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding Users}"
-                            ItemDisplayBinding="{Binding Name}"
-                            SelectedItem="{Binding SelectedUser}"
-                            Title="Selecciona un usuario"
-                            TextColor="#FAFAFA"
-                            BackgroundColor="#181818"/>
-
                     <!-- Grid para Plan de Pago y Método de Pago -->
                     <Grid ColumnDefinitions="*,*"
                           RowDefinitions="Auto,Auto"
@@ -64,9 +54,9 @@
                                TextColor="#FAFAFA"
                                FontAttributes="Bold"
                                Grid.Column="1"/>
-                        <Picker ItemsSource="{Binding PaymentPlans}"
-                                ItemDisplayBinding="{Binding Name}"
-                                SelectedItem="{Binding SelectedPaymentPlan}"
+                        <Picker ItemsSource="{Binding UserPaymentPlans}"
+                                ItemDisplayBinding="{Binding User.Name}"
+                                SelectedItem="{Binding SelectedUserPaymentPlan}"
                                 Title="Selecciona"
                                 TextColor="#FAFAFA"
                                 BackgroundColor="#181818"

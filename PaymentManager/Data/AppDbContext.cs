@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using PaymentManager.Models;
 
-
 namespace PaymentManager.Data
 {
     public class AppDbContext : DbContext
@@ -10,43 +9,40 @@ namespace PaymentManager.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<PaymentPlan> PaymentPlans => Set<PaymentPlan>();
-        public DbSet<PaymentStatus> PaymentStatuses => Set<PaymentStatus>();
         public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
+        public DbSet<UserPaymentPlan> UserPaymentPlans => Set<UserPaymentPlan>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // PaymentStatus: relación uno-a-uno con User
-            modelBuilder.Entity<PaymentStatus>()
-                .HasKey(ps => ps.UserId);
-
-            modelBuilder.Entity<PaymentStatus>()
-                .HasOne(ps => ps.User)
-                .WithOne(u => u.PaymentStatus)
-                .HasForeignKey<PaymentStatus>(ps => ps.UserId)
+            // User → UserPaymentPlan (uno a muchos)
+            modelBuilder.Entity<UserPaymentPlan>()
+                .HasOne(upp => upp.User)
+                .WithMany(u => u.UserPaymentPlans)
+                .HasForeignKey(upp => upp.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Payment → User (muchos a uno)
+            // PaymentPlan → UserPaymentPlan (uno a muchos)
+            modelBuilder.Entity<UserPaymentPlan>()
+                .HasOne(upp => upp.PaymentPlan)
+                .WithMany(pp => pp.UserPaymentPlans)
+                .HasForeignKey(upp => upp.PaymentPlanId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // UserPaymentPlan → Payment (uno a muchos)
             modelBuilder.Entity<Payment>()
-                .HasOne(p => p.User)
-                .WithMany(u => u.Payments)
-                .HasForeignKey(p => p.UserId)
-                .HasForeignKey(p => p.UserId)
+                .HasOne(p => p.UserPaymentPlan)
+                .WithMany(upp => upp.Payments)
+                .HasForeignKey(p => p.UserPaymentPlanId)
                 .OnDelete(DeleteBehavior.Cascade);
+
             // Payment → PaymentMethod (muchos a uno, nullable)
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.PaymentMethod)
                 .WithMany(pm => pm.Payments)
                 .HasForeignKey(p => p.PaymentMethodId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(p => p.PaymentMethodId)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Payment>()
-                .HasOne(p => p.PaymentPlan)
-                .WithMany(pp => pp.Payments)
-                .HasForeignKey(p => p.PaymentPlanId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

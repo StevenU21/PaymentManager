@@ -11,18 +11,32 @@
             set => SetProperty(ref name, value);
         }
 
-        private DateTime? dayOfMonth;
-        public DateTime? DayOfMonth
+        private decimal totalAmount;
+        public decimal TotalAmount
         {
-            get => dayOfMonth;
-            set => SetProperty(ref dayOfMonth, value);
+            get => totalAmount;
+            set => SetProperty(ref totalAmount, value);
         }
 
-        private decimal amount;
-        public decimal Amount
+        private bool isRecurring = true;
+        public bool IsRecurring
         {
-            get => amount;
-            set => SetProperty(ref amount, value);
+            get => isRecurring;
+            set => SetProperty(ref isRecurring, value);
+        }
+
+        private ushort? totalPeriods;
+        public ushort? TotalPeriods
+        {
+            get => totalPeriods;
+            set => SetProperty(ref totalPeriods, value);
+        }
+
+        private int dayOfMonthToPay = 1;
+        public int DayOfMonthToPay
+        {
+            get => dayOfMonthToPay;
+            set => SetProperty(ref dayOfMonthToPay, value);
         }
 
         private bool active = true;
@@ -31,6 +45,7 @@
             get => active;
             set => SetProperty(ref active, value);
         }
-        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+        public ICollection<UserPaymentPlan> UserPaymentPlans { get; set; } = new List<UserPaymentPlan>();
     }
 }

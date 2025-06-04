@@ -4,12 +4,8 @@
     {
         public int Id { get; set; }
 
-        private int userId;
-        public int UserId
-        {
-            get => userId;
-            set => SetProperty(ref userId, value);
-        }
+        public int UserPaymentPlanId { get; set; }
+        public UserPaymentPlan? UserPaymentPlan { get; set; }
 
         private DateTime paymentDate;
         public DateTime PaymentDate
@@ -25,36 +21,21 @@
             set => SetProperty(ref amountPaid, value);
         }
 
-        private ushort periodsPaid;
+        private ushort periodsPaid = 1;
         public ushort PeriodsPaid
         {
             get => periodsPaid;
             set => SetProperty(ref periodsPaid, value);
         }
 
-        private DateTime nextDueDate;
-        public DateTime NextDueDate
+        private DateTime? nextDueDate;
+        public DateTime? NextDueDate
         {
             get => nextDueDate;
             set => SetProperty(ref nextDueDate, value);
         }
 
-        private int? paymentMethodId;
-        public int? PaymentMethodId
-        {
-            get => paymentMethodId;
-            set => SetProperty(ref paymentMethodId, value);
-        }
-
-        private int? paymentPlanId;
-        public int? PaymentPlanId
-        {
-            get => paymentPlanId;
-            set => SetProperty(ref paymentPlanId, value);
-        }
-
-        public User? User { get; set; }
+        public int? PaymentMethodId { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
-        public PaymentPlan? PaymentPlan { get; set; }
     }
-}   
+}

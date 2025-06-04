@@ -11,8 +11,8 @@ namespace PaymentManager.Validators
             return new Dictionary<string, string>
             {
                 ["Name"] = "required|min:3|max:50",
-                ["DayOfMonth"] = "required|date",
-                ["Amount"] = "required|float",
+                ["DayOfMonthToPay"] = "required|integer|min:1|max:31",
+                ["TotalAmount"] = "required|float",
                 ["Active"] = "required"
             };
         }
@@ -25,12 +25,14 @@ namespace PaymentManager.Validators
                 ["Name.min"] = "El nombre debe tener al menos 3 caracteres.",
                 ["Name.max"] = "El nombre no puede superar los 50 caracteres.",
 
-                ["DayOfMonth.required"] = "El día de pago es obligatorio.",
-                ["DayOfMonth.date"] = "El día de pago debe ser una fecha válida.",
+                ["DayOfMonthToPay.required"] = "El día de pago es obligatorio.",
+                ["DayOfMonthToPay.integer"] = "El día de pago debe ser un número entero.",
+                ["DayOfMonthToPay.min"] = "El día de pago debe ser al menos 1.",
+                ["DayOfMonthToPay.max"] = "El día de pago no puede ser mayor a 31.",
 
-                ["Amount.required"] = "El monto es obligatorio.",
-                ["Amount.float"] = "El monto debe ser un número válido.",
-                ["Amount.min"] = "El monto debe ser mayor a 0.",
+                ["TotalAmount.required"] = "El monto es obligatorio.",
+                ["TotalAmount.float"] = "El monto debe ser un número válido.",
+                ["TotalAmount.min"] = "El monto debe ser mayor a 0.",
 
                 ["Active.required"] = "Debe indicar si el plan está activo."
             };

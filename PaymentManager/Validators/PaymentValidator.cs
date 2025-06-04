@@ -11,13 +11,12 @@ namespace PaymentManager.Validators
         {
             return new Dictionary<string, string>
             {
-                ["UserId"] = "required|integer|min:1",
+                ["UserPaymentPlanId"] = "required|integer|min:1",
                 ["PaymentDate"] = "date",
                 ["AmountPaid"] = "required|float",
                 ["PeriodsPaid"] = "required|integer|min:1",
                 ["NextDueDate"] = "date",
-                ["PaymentMethodId"] = "required|integer|min:1",
-                ["PaymentPlanId"] = "required|integer|min:1"
+                ["PaymentMethodId"] = "required|integer|min:1"
             };
         }
 
@@ -25,9 +24,9 @@ namespace PaymentManager.Validators
         {
             return new Dictionary<string, string>
             {
-                ["UserId.required"] = "El usuario es obligatorio.",
-                ["UserId.integer"] = "El usuario seleccionado no es válido.",
-                ["UserId.min"] = "Debe seleccionar un usuario.",
+                ["UserPaymentPlanId.required"] = "El plan de pago del usuario es obligatorio.",
+                ["UserPaymentPlanId.integer"] = "El plan de pago seleccionado no es válido.",
+                ["UserPaymentPlanId.min"] = "Debe seleccionar un plan de pago.",
 
                 ["PaymentDate.date"] = "La fecha de pago no es válida.",
 
@@ -43,11 +42,7 @@ namespace PaymentManager.Validators
 
                 ["PaymentMethodId.required"] = "El método de pago es obligatorio.",
                 ["PaymentMethodId.integer"] = "El método de pago seleccionado no es válido.",
-                ["PaymentMethodId.min"] = "Debe seleccionar un método de pago.",
-
-                ["PaymentPlanId.required"] = "El plan de pago es obligatorio.",
-                ["PaymentPlanId.integer"] = "El plan de pago seleccionado no es válido.",
-                ["PaymentPlanId.min"] = "Debe seleccionar un plan de pago."
+                ["PaymentMethodId.min"] = "Debe seleccionar un método de pago válido."
             };
         }
     }

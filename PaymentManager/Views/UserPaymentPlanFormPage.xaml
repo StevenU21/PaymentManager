@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:PaymentManager.Converters"
+             x:Class="PaymentManager.Views.UserPaymentPlanFormPage"
+             Title="Usuario-Plan"
+             BackgroundColor="#181818">
+
+       <ContentPage.Resources>
+              <ResourceDictionary>
+                     <converters:StringToDecimalConverter x:Key="StringToDecimalConverter"/>
+              </ResourceDictionary>
+       </ContentPage.Resources>
+
+       <ScrollView>
+              <VerticalStackLayout Padding="10"
+                            Spacing="10">
+                     <Button Text="Cancelar"
+                             HorizontalOptions="End"
+                             Margin="0,0,0,10"
+                             Command="{Binding CancelCommand}"
+                             BackgroundColor="#2D2D2D"
+                             TextColor="#FAFAFA"
+                             CornerRadius="8"
+                             FontAttributes="Bold"
+                             HeightRequest="44"/>
+
+                     <Border Padding="16"
+                             BackgroundColor="#232323"
+                             Stroke="#444"
+                             StrokeThickness="1">
+                            <Border.StrokeShape>
+                                   <RoundRectangle CornerRadius="12"/>
+                            </Border.StrokeShape>
+                            <Border.Shadow>
+                                   <Shadow Brush="Black"
+                                           Offset="4,4"
+                                           Radius="8"
+                                           Opacity="0.5"/>
+                            </Border.Shadow>
+
+                            <VerticalStackLayout Spacing="15">
+                                   <Label Text="Usuario"
+                                          TextColor="#FAFAFA"
+                                          FontAttributes="Bold"/>
+                                   <Picker ItemsSource="{Binding Users}"
+                                           ItemDisplayBinding="{Binding Name}"
+                                           SelectedItem="{Binding SelectedUser}"
+                                           Title="Selecciona un usuario"
+                                           TextColor="#FAFAFA"
+                                           BackgroundColor="#181818"/>
+
+                                   <Label Text="Plan de Pago"
+                                          TextColor="#FAFAFA"
+                                          FontAttributes="Bold"/>
+                                   <Picker ItemsSource="{Binding PaymentPlans}"
+                                           ItemDisplayBinding="{Binding Name}"
+                                           SelectedItem="{Binding SelectedPaymentPlan}"
+                                           Title="Selecciona un plan"
+                                           TextColor="#FAFAFA"
+                                           BackgroundColor="#181818"/>
+
+                                   <Button Text="Guardar"
+                                           Command="{Binding SaveCommand}"
+                                           BackgroundColor="#1976D2"
+                                           TextColor="White"
+                                           CornerRadius="8"
+                                           FontAttributes="Bold"
+                                           HeightRequest="44"/>
+                            </VerticalStackLayout>
+                     </Border>
+              </VerticalStackLayout>
+       </ScrollView>
+</ContentPage>
