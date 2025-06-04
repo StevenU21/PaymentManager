@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using PaymentManager.Models;
+﻿using PaymentManager.Models;
 using PaymentManager.Services;
 
 namespace PaymentManager.ViewModels

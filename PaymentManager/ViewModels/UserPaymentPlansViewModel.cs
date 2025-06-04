@@ -54,7 +54,7 @@ namespace PaymentManager.ViewModels
                 );
                 viewModel.EntitySaved += async upp =>
                 {
-                    await ReloadUserPaymentPlansAsync(); // Recarga toda la lista
+                    await ReloadUserPaymentPlansAsync(); 
                 };
                 formPage.BindingContext = viewModel;
                 await mainPage.Navigation.PushModalAsync(formPage);

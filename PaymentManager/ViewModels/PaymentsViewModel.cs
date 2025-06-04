@@ -64,7 +64,7 @@
                     );
                     viewModel.EntitySaved += async payment =>
                     {
-                        await LoadItemsAsync(); // Recargar toda la lista después de guardar
+                        await LoadItemsAsync(); 
                     };
                     formPage.BindingContext = viewModel;
                     await mainPage.Navigation.PushModalAsync(formPage);
@@ -92,7 +92,7 @@
                     );
                     viewModel.EntitySaved += async payment =>
                     {
-                        await LoadItemsAsync(); // Recargar toda la lista después de guardar
+                        await LoadItemsAsync(); 
                     };
                     formPage.BindingContext = viewModel;
                     await mainPage.Navigation.PushModalAsync(formPage);

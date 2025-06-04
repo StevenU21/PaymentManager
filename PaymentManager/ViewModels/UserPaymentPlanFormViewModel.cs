@@ -45,7 +45,6 @@ namespace PaymentManager.ViewModels
             set => Entity = value;
         }
 
-        // Propiedad para habilitar/deshabilitar el botón Guardar
         public bool CanSave =>
             UserPaymentPlan != null &&
             UserPaymentPlan.UserId > 0 &&
