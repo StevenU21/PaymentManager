@@ -45,19 +45,15 @@
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding ShareAmount, StringFormat='Cuota: {0:C2}'}"
+                                <Label Text="{Binding ShareAmount, StringFormat='A Pagar: {0:C2}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
-                                <Label Text="{Binding JoinDate, StringFormat='Inicio: {0:dd/MM/yyyy}'}"
+                                <Label Text="{Binding JoinDate, StringFormat='Fecha de Registro: {0:dd/MM/yyyy}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>
                                 <Label Text="{Binding Status, StringFormat='Estado: {0}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <Label Text="{Binding Active, StringFormat='Activo: {0}'}"
                                        FontSize="14"
                                        TextColor="#B0B0B0"
                                        Margin="0,2,0,0"/>

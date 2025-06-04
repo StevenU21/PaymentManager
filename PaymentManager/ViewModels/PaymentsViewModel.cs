@@ -1,4 +1,4 @@
-﻿    using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
     using System.Windows.Input;
     using PaymentManager.Models;
     using PaymentManager.Services;
@@ -62,9 +62,9 @@
                         _paymentMethodService,
                         mainPage.Navigation
                     );
-                    viewModel.EntitySaved += payment =>
+                    viewModel.EntitySaved += async payment =>
                     {
-                        Payments.Add(payment);
+                        await LoadItemsAsync(); // Recargar toda la lista después de guardar
                     };
                     formPage.BindingContext = viewModel;
                     await mainPage.Navigation.PushModalAsync(formPage);
@@ -90,19 +90,9 @@
                         _paymentMethodService,
                         mainPage.Navigation
                     );
-                    viewModel.EntitySaved += updated =>
+                    viewModel.EntitySaved += async payment =>
                     {
-                        var existing = Payments.FirstOrDefault(p => p.Id == updated.Id);
-                        if (existing != null)
-                        {
-                            existing.AmountPaid = updated.AmountPaid;
-                            existing.PaymentDate = updated.PaymentDate;
-                            existing.PeriodsPaid = updated.PeriodsPaid;
-                            existing.NextDueDate = updated.NextDueDate;
-                            existing.PaymentMethodId = updated.PaymentMethodId;
-                            existing.UserPaymentPlanId = updated.UserPaymentPlanId;
-                            // Actualiza otros campos si es necesario
-                        }
+                        await LoadItemsAsync(); // Recargar toda la lista después de guardar
                     };
                     formPage.BindingContext = viewModel;
                     await mainPage.Navigation.PushModalAsync(formPage);

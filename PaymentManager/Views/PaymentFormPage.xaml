@@ -11,6 +11,7 @@
             <converters:StringToIntConverter x:Key="StringToIntConverter"/>
             <converters:StringToDecimalConverter x:Key="StringToDecimalConverter"/>
             <converters:NullToBoolConverter x:Key="NullToBoolConverter"/>
+            <converters:UserPaymentPlanDisplayConverter x:Key="UserPaymentPlanDisplayConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -55,7 +56,7 @@
                                FontAttributes="Bold"
                                Grid.Column="1"/>
                         <Picker ItemsSource="{Binding UserPaymentPlans}"
-                                ItemDisplayBinding="{Binding User.Name}"
+                                ItemDisplayBinding="{Binding ., Converter={StaticResource UserPaymentPlanDisplayConverter}}"
                                 SelectedItem="{Binding SelectedUserPaymentPlan}"
                                 Title="Selecciona"
                                 TextColor="#FAFAFA"
@@ -72,7 +73,7 @@
                                 Grid.Row="1"/>
                     </Grid>
 
-                    <!-- Grid para Monto Pagado y Periodos Pagados -->
+                    <!-- Grid para Monto Pagado (sin periodos) -->
                     <Grid ColumnDefinitions="*,*"
                           RowDefinitions="Auto,Auto"
                           ColumnSpacing="10">
@@ -80,9 +81,8 @@
                                TextColor="#FAFAFA"
                                FontAttributes="Bold"
                                Grid.Column="0"/>
-                        <Label Text="Periodos Pagados"
-                               TextColor="#FAFAFA"
-                               FontAttributes="Bold"
+                        <!-- Columna vacía para mantener el diseño -->
+                        <Label Text=""
                                Grid.Column="1"/>
                         <Entry Placeholder="Monto"
                                Text="{Binding Payment.AmountPaid, Converter={StaticResource StringToDecimalConverter}}"
@@ -91,14 +91,6 @@
                                PlaceholderColor="#B0B0B0"
                                BackgroundColor="#181818"
                                Grid.Column="0"
-                               Grid.Row="1"/>
-                        <Entry Placeholder="Periodos"
-                               Text="{Binding Payment.PeriodsPaid, Converter={StaticResource StringToIntConverter}}"
-                               Keyboard="Numeric"
-                               TextColor="#FAFAFA"
-                               PlaceholderColor="#B0B0B0"
-                               BackgroundColor="#181818"
-                               Grid.Column="1"
                                Grid.Row="1"/>
                     </Grid>
 

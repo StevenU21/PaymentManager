@@ -66,7 +66,7 @@ namespace PaymentManager
             {
                 string dbPath = Path.Combine(
                     FileSystem.AppDataDirectory,
-                    "source.db"
+                    "nose.db"
                 );
                 options.UseSqlite($"Data Source={dbPath}");
             });

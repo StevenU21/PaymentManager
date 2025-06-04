@@ -69,6 +69,13 @@ namespace PaymentManager.ViewModels
             {
                 PaymentDate = DateTime.Now
             };
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Payment.AmountPaid) || e.PropertyName == nameof(SelectedUserPaymentPlan))
+                {
+                    UpdatePeriodsPaid();
+                }
+            };
         }
 
         public PaymentFormViewModel(
@@ -100,17 +107,45 @@ namespace PaymentManager.ViewModels
                 selectedUserPaymentPlan = UserPaymentPlans.FirstOrDefault(upp => upp.Id == Payment.UserPaymentPlanId);
             if (Payment.PaymentMethodId != null)
                 selectedPaymentMethod = PaymentMethods.FirstOrDefault(pm => pm.Id == Payment.PaymentMethodId);
-
-            if (SelectedUserPaymentPlan != null)
-            {
-                SetNextDueDateFromUserPaymentPlan(SelectedUserPaymentPlan);
-            }
         }
 
         private void SetNextDueDateFromUserPaymentPlan(UserPaymentPlan userPaymentPlan)
         {
-            var nextDueDate = _paymentService.CalculateNextDueDate(Payment, userPaymentPlan.PaymentPlan!);
-            Payment.NextDueDate = nextDueDate ?? default;
+            if (userPaymentPlan.PaymentPlan == null)
+                return;
+
+            var plan = userPaymentPlan.PaymentPlan;
+            int dayOfMonth = plan.DayOfMonthToPay;
+            int periodos = Payment.PeriodsPaid > 0 ? Payment.PeriodsPaid : 1;
+            var fechaPago = Payment.PaymentDate;
+
+            DateTime proximaFechaPago;
+            if (fechaPago.Day < dayOfMonth)
+            {
+                proximaFechaPago = new DateTime(fechaPago.Year, fechaPago.Month, dayOfMonth);
+            }
+            else
+            {
+                var siguienteMes = fechaPago.AddMonths(1);
+                proximaFechaPago = new DateTime(siguienteMes.Year, siguienteMes.Month, dayOfMonth);
+            }
+
+            proximaFechaPago = proximaFechaPago.AddMonths(periodos - 1);
+            Payment.NextDueDate = proximaFechaPago;
+        }
+
+        private void UpdatePeriodsPaid()
+        {
+            if (SelectedUserPaymentPlan?.ShareAmount > 0)
+            {
+                var periods = (int)(Payment.AmountPaid / SelectedUserPaymentPlan.ShareAmount);
+                Payment.PeriodsPaid = (ushort)Math.Max(1, periods); 
+            }
+            else
+            {
+                Payment.PeriodsPaid = 1;
+            }
+            OnPropertyChanged(nameof(Payment));
         }
 
         protected override async Task SaveAsync()
@@ -132,14 +167,35 @@ namespace PaymentManager.ViewModels
             }
 
             await base.SaveAsync();
+
+            await LoadCombosAsync();
+            OnPropertyChanged(nameof(SelectedUserPaymentPlan));
+            OnPropertyChanged(nameof(SelectedPaymentMethod));
         }
 
         protected override async Task SaveOrUpdateAsync()
         {
+            UpdatePeriodsPaid();
+
+            if (SelectedUserPaymentPlan != null && SelectedUserPaymentPlan.PaymentPlan != null)
+            {
+                var totalPeriods = SelectedUserPaymentPlan.PaymentPlan.TotalPeriods ?? 1;
+                var pagos = SelectedUserPaymentPlan.Payments?.Sum(p => p.PeriodsPaid) ?? 0;
+                var pagados = pagos + Payment.PeriodsPaid;
+                if (pagados >= totalPeriods)
+                {
+                    SelectedUserPaymentPlan.Status = "Pagado";
+                }
+            }
+
             if (Payment.Id != 0)
                 await _paymentService.UpdateAsync(Payment);
             else
                 await _paymentService.AddAsync(Payment);
+
+            await LoadCombosAsync();
+            OnPropertyChanged(nameof(SelectedUserPaymentPlan));
+            OnPropertyChanged(nameof(SelectedPaymentMethod));
         }
 
         protected override bool GetIsEdit() => Payment.Id != 0;
