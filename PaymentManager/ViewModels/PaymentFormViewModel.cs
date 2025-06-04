@@ -139,7 +139,7 @@ namespace PaymentManager.ViewModels
             if (SelectedUserPaymentPlan?.ShareAmount > 0)
             {
                 var periods = (int)(Payment.AmountPaid / SelectedUserPaymentPlan.ShareAmount);
-                Payment.PeriodsPaid = (ushort)Math.Max(1, periods); 
+                Payment.PeriodsPaid = (ushort)Math.Max(1, periods);
             }
             else
             {
@@ -179,12 +179,18 @@ namespace PaymentManager.ViewModels
 
             if (SelectedUserPaymentPlan != null && SelectedUserPaymentPlan.PaymentPlan != null)
             {
-                var totalPeriods = SelectedUserPaymentPlan.PaymentPlan.TotalPeriods ?? 1;
-                var pagos = SelectedUserPaymentPlan.Payments?.Sum(p => p.PeriodsPaid) ?? 0;
-                var pagados = pagos + Payment.PeriodsPaid;
-                if (pagados >= totalPeriods)
+                var pagosPrevios = SelectedUserPaymentPlan.Payments?.Sum(p => p.AmountPaid) ?? 0;
+                var totalPagado = pagosPrevios + Payment.AmountPaid;
+                var cuota = SelectedUserPaymentPlan.ShareAmount;
+
+                if (totalPagado >= cuota)
                 {
                     SelectedUserPaymentPlan.Status = "Pagado";
+                    SetNextDueDateFromUserPaymentPlan(SelectedUserPaymentPlan);
+                }
+                else
+                {
+                    SelectedUserPaymentPlan.Status = "Pendiente";
                 }
             }
 

@@ -81,32 +81,7 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <!-- Recurrente y Total de períodos -->
-                    <Grid ColumnSpacing="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="Recurrente"
-                                   TextColor="#FAFAFA"
-                                   FontAttributes="Bold"/>
-                            <Switch IsToggled="{Binding PaymentPlan.IsRecurring}"/>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Grid.Column="1" Spacing="2">
-                            <Label Text="Total de períodos"
-                                   TextColor="#FAFAFA"
-                                   FontAttributes="Bold"/>
-                            <Entry Placeholder="Ej: 12"
-                                   Text="{Binding PaymentPlan.TotalPeriods}"
-                                   Keyboard="Numeric"
-                                   TextColor="#FAFAFA"
-                                   PlaceholderColor="#B0B0B0"
-                                   BackgroundColor="#181818"/>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <!-- Eliminado el binding y visualización de IsRecurring -->
 
                     <Label Text="Activo"
                            TextColor="#FAFAFA"

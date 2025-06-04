@@ -18,20 +18,6 @@
             set => SetProperty(ref totalAmount, value);
         }
 
-        private bool isRecurring = true;
-        public bool IsRecurring
-        {
-            get => isRecurring;
-            set => SetProperty(ref isRecurring, value);
-        }
-
-        private ushort? totalPeriods;
-        public ushort? TotalPeriods
-        {
-            get => totalPeriods;
-            set => SetProperty(ref totalPeriods, value);
-        }
-
         private int dayOfMonthToPay = 1;
         public int DayOfMonthToPay
         {

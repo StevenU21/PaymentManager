@@ -82,8 +82,7 @@ namespace PaymentManager.ViewModels
                         existing.TotalAmount = updated.TotalAmount;
                         existing.DayOfMonthToPay = updated.DayOfMonthToPay;
                         existing.Active = updated.Active;
-                        existing.IsRecurring = updated.IsRecurring;
-                        existing.TotalPeriods = updated.TotalPeriods;
+                        // Eliminada la asignación de IsRecurring ya que no existe más
                     }
                 };
                 formPage.BindingContext = viewModel;

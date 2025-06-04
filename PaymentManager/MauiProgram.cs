@@ -77,7 +77,7 @@ namespace PaymentManager
 
             using (var scope = Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();  
                 db.Database.EnsureCreated();
             }
             return app;
