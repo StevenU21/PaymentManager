@@ -8,30 +8,30 @@
     Title="PaymentManager"
     >
 
-    <FlyoutItem Title="Inicio" Route="MainPage">
+    <FlyoutItem Title="Inicio" Route="MainPage" Icon="home_solid.svg">
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Usuarios" Icon="users.png">
+    <FlyoutItem Title="Usuarios" Icon="users_solid.svg">
         <ShellContent Route="users" ContentTemplate="{DataTemplate views:UserPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Metodos de Pago" Icon="metodos_pagos.png">
+    <FlyoutItem Title="Metodos de Pago" Icon="money_check_dollar_solid.svg">
         <ShellContent Route="paymentMethods" ContentTemplate="{DataTemplate views:PaymentMethodPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Planes de Pago" Icon="planes_pagos.png">
+    <FlyoutItem Title="Planes de Pago" Icon="briefcase_solid.svg">
         <ShellContent Route="paymentPlans" ContentTemplate="{DataTemplate views:PaymentPlanPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Pagos de Planes de Usuarios" Icon="planes_pagos.png">
+    <FlyoutItem Title="Pagos de Planes de Usuarios" Icon="layer_group_solid.svg">
         <ShellContent Route="userpaymentPlans" ContentTemplate="{DataTemplate views:UserPaymentPlansPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Pagos" Icon="pagos.png">
+    <FlyoutItem Title="Pagos" Icon="cash_register_solid.svg">
         <ShellContent Route="payments" ContentTemplate="{DataTemplate views:PaymentPage}" />
     </FlyoutItem>
 
