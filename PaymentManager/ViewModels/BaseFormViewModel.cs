@@ -36,7 +36,7 @@ namespace PaymentManager.ViewModels
                 return;
             }
 
-            var (isValid, errorMessage) = await _validationService.ValidateAsync(Entity, GetIsEdit());
+                var (isValid, errorMessage) = await _validationService.ValidateAsync(Entity, GetIsEdit());
             if (!isValid)
             {
                 await _messagingService.ShowMessageAsync("Error", errorMessage ?? "Unknown error");

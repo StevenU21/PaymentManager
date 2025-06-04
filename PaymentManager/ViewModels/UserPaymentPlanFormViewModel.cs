@@ -19,12 +19,10 @@ namespace PaymentManager.ViewModels
             get => Users.FirstOrDefault(u => u.Id == UserPaymentPlan.UserId) ?? selectedUser;
             set
             {
-                if (value != null)
-                {
-                    selectedUser = value;
-                    UserPaymentPlan.UserId = value.Id;
-                    OnPropertyChanged(nameof(SelectedUser));
-                }
+                selectedUser = value;
+                UserPaymentPlan.UserId = value?.Id ?? 0;
+                OnPropertyChanged(nameof(SelectedUser));
+                UpdateCanSave();
             }
         }
 
@@ -34,12 +32,10 @@ namespace PaymentManager.ViewModels
             get => PaymentPlans.FirstOrDefault(p => p.Id == UserPaymentPlan.PaymentPlanId) ?? selectedPaymentPlan;
             set
             {
-                if (value != null)
-                {
-                    selectedPaymentPlan = value;
-                    UserPaymentPlan.PaymentPlanId = value.Id;
-                    OnPropertyChanged(nameof(SelectedPaymentPlan));
-                }
+                selectedPaymentPlan = value;
+                UserPaymentPlan.PaymentPlanId = value?.Id ?? 0;
+                OnPropertyChanged(nameof(SelectedPaymentPlan));
+                UpdateCanSave();
             }
         }
 
@@ -47,6 +43,17 @@ namespace PaymentManager.ViewModels
         {
             get => Entity!;
             set => Entity = value;
+        }
+
+        // Propiedad para habilitar/deshabilitar el botón Guardar
+        public bool CanSave =>
+            UserPaymentPlan != null &&
+            UserPaymentPlan.UserId > 0 &&
+            UserPaymentPlan.PaymentPlanId > 0;
+
+        private void UpdateCanSave()
+        {
+            OnPropertyChanged(nameof(CanSave));
         }
 
         public UserPaymentPlanFormViewModel(
@@ -61,9 +68,13 @@ namespace PaymentManager.ViewModels
             _userPaymentPlanService = userPaymentPlanService ?? throw new ArgumentNullException(nameof(userPaymentPlanService));
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _paymentPlanService = paymentPlanService ?? throw new ArgumentNullException(nameof(paymentPlanService));
-            UserPaymentPlan = new UserPaymentPlan();
-            UserPaymentPlan.JoinDate = DateTime.Now;
-            UserPaymentPlan.Status = "Pendiente";
+            UserPaymentPlan = new UserPaymentPlan
+            {
+                UserId = 0,
+                PaymentPlanId = 0,
+                JoinDate = DateTime.Now,
+                Status = "Pendiente"
+            };
             LoadCombos();
         }
 
@@ -80,6 +91,7 @@ namespace PaymentManager.ViewModels
             UserPaymentPlan = userPaymentPlan;
             selectedUser = Users.FirstOrDefault(u => u.Id == userPaymentPlan.UserId);
             selectedPaymentPlan = PaymentPlans.FirstOrDefault(p => p.Id == userPaymentPlan.PaymentPlanId);
+            UpdateCanSave();
         }
 
         private async void LoadCombos()
@@ -101,10 +113,25 @@ namespace PaymentManager.ViewModels
             OnPropertyChanged(nameof(PaymentPlans));
             OnPropertyChanged(nameof(SelectedUser));
             OnPropertyChanged(nameof(SelectedPaymentPlan));
+            UpdateCanSave();
         }
 
         protected override async Task SaveOrUpdateAsync()
         {
+            // Lógica para evitar duplicados
+            var existentes = await _userPaymentPlanService.GetAllAsync();
+            bool yaExiste = existentes.Any(upp =>
+                upp.UserId == UserPaymentPlan.UserId &&
+                upp.PaymentPlanId == UserPaymentPlan.PaymentPlanId &&
+                upp.Id != UserPaymentPlan.Id
+            );
+
+            if (yaExiste)
+            {
+                await _messagingService.ShowMessageAsync("Error", "Este usuario ya está registrado en el plan de pago seleccionado.");
+                return;
+            }
+
             UserPaymentPlan.JoinDate = DateTime.Now;
             UserPaymentPlan.Status = "Pendiente";
 

@@ -14,7 +14,7 @@
 
        <ScrollView>
               <VerticalStackLayout Padding="10"
-                            Spacing="10">
+                                   Spacing="10">
                      <Button Text="Cancelar"
                              HorizontalOptions="End"
                              Margin="0,0,0,10"
@@ -62,11 +62,19 @@
 
                                    <Button Text="Guardar"
                                            Command="{Binding SaveCommand}"
+                                           IsEnabled="{Binding CanSave}"
                                            BackgroundColor="#1976D2"
                                            TextColor="White"
                                            CornerRadius="8"
                                            FontAttributes="Bold"
-                                           HeightRequest="44"/>
+                                           HeightRequest="44">
+                                       <Button.Triggers>
+                                           <DataTrigger TargetType="Button" Binding="{Binding CanSave}" Value="False">
+                                               <Setter Property="Opacity" Value="0.5"/>
+                                               <Setter Property="BackgroundColor" Value="#888"/>
+                                           </DataTrigger>
+                                       </Button.Triggers>
+                                   </Button>
                             </VerticalStackLayout>
                      </Border>
               </VerticalStackLayout>

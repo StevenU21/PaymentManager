@@ -28,6 +28,7 @@ namespace PaymentManager
             builder.Services.AddScoped<IPaymentPlanService, PaymentPlanService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IUserPaymentPlanService, UserPaymentPlanService>();
+            builder.Services.AddScoped<IBaseService<UserPaymentPlan>>(provider => provider.GetRequiredService<IUserPaymentPlanService>());
 
             builder.Services.AddScoped<IValidationService<UserPaymentPlan>>(provider =>
             {
@@ -40,6 +41,7 @@ namespace PaymentManager
                 var paymentService = provider.GetRequiredService<IPaymentService>();
                 return new ValidationService<Payment>(paymentService, new PaymentValidator(new List<Payment>()));
             });
+
             builder.Services.AddScoped<IValidationService<User>>(provider =>
             {
                 var userService = provider.GetRequiredService<IUserService>();
