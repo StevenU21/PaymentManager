@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="PaymentManager.Views.UserPage"
              x:Name="UserPageRoot"
              Title="Usuarios"
@@ -26,19 +28,25 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="12" BackgroundColor="#232323" ColumnSpacing="12" HeightRequest="80" VerticalOptions="Center">
+                        <Grid.Behaviors>
+                            <toolkit:TouchBehavior LongPressCommand="{Binding Source={x:Reference UserPageRoot}, Path=BindingContext.DeleteUserCommand}"
+                                                 LongPressCommandParameter="{Binding .}" />
+                        </Grid.Behaviors>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Border Padding="0" BackgroundColor="#3B82F6" Stroke="#3B82F6" StrokeThickness="0" WidthRequest="48" HeightRequest="48" VerticalOptions="Center" HorizontalOptions="Center" StrokeShape="RoundRectangle">
+                        <syncfusion:SfAvatarView WidthRequest="48" HeightRequest="48" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="#3B82F6" CornerRadius="24">
                             <Label Text="{Binding Name, Converter={StaticResource InitialsConverter}}" VerticalOptions="Center" HorizontalOptions="Center" TextColor="White" FontAttributes="Bold" FontSize="20" />
-                        </Border>
+                        </syncfusion:SfAvatarView>
                         <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                             <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" TextColor="#FAFAFA" />
                             <Label Text="{Binding Email}" FontSize="14" TextColor="#B0B0B0" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="2" Text="Editar" HeightRequest="32" WidthRequest="70" CornerRadius="8" Command="{Binding Source={x:Reference UserPageRoot}, Path=BindingContext.EditUserCommand}" CommandParameter="{Binding .}" BackgroundColor="#232323" TextColor="#3B82F6" BorderColor="#3B82F6" BorderWidth="1" />
+                        <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
+                            <Button Text="Editar" HeightRequest="32" WidthRequest="70" CornerRadius="8" Command="{Binding Source={x:Reference UserPageRoot}, Path=BindingContext.EditUserCommand}" CommandParameter="{Binding .}" BackgroundColor="#232323" TextColor="#3B82F6" BorderColor="#3B82F6" BorderWidth="1" />
+                        </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

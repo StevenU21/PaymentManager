@@ -17,11 +17,14 @@ namespace PaymentManager
         {
             var builder = MauiApp.CreateBuilder();
 
-            // Leer la clave de licencia de Syncfusion desde un archivo seguro
             string licenseKey = LoadSyncfusionLicenseKey();
             if (!string.IsNullOrWhiteSpace(licenseKey))
             {
                 SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Syncfusion License Key not found or invalid.");
             }
             
             builder
@@ -96,18 +99,29 @@ namespace PaymentManager
         {
             try
             {
-                var licenseFile = Path.Combine(AppContext.BaseDirectory, "syncfusion.license.json");
-                if (File.Exists(licenseFile))
+                // Buscar el archivo en la raíz y en la carpeta de salida
+                string[] possiblePaths = new[] {
+                    Path.Combine(AppContext.BaseDirectory, "syncfusion.license.json"),
+                    Path.Combine(Environment.CurrentDirectory, "syncfusion.license.json"),
+                    Path.Combine(Directory.GetCurrentDirectory(), "syncfusion.license.json")
+                };
+                foreach (var licenseFile in possiblePaths)
                 {
-                    var json = File.ReadAllText(licenseFile);
-                    using var doc = JsonDocument.Parse(json);
-                    if (doc.RootElement.TryGetProperty("SyncfusionLicenseKey", out var keyProp))
+                    if (File.Exists(licenseFile))
                     {
-                        return keyProp.GetString() ?? string.Empty;
+                        var json = File.ReadAllText(licenseFile);
+                        using var doc = JsonDocument.Parse(json);
+                        if (doc.RootElement.TryGetProperty("SyncfusionLicenseKey", out var keyProp))
+                        {
+                            return keyProp.GetString() ?? string.Empty;
+                        }
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error leyendo Syncfusion License: {ex.Message}");
+            }
             return string.Empty;
         }
     }

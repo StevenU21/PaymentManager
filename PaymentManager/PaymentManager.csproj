@@ -134,4 +134,10 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+    <None Update="syncfusion.license.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
