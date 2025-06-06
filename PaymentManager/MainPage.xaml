@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            x:Class="PaymentManager.MainPage"
-            Title="MainPage">
-
-    
-    <VerticalStackLayout>
-        <Label
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"/>
-    </VerticalStackLayout>
-
-
+            x:Class="PaymentManager.MainPage">
+            
+    <Grid RowDefinitions="Auto,*,Auto" BackgroundColor="#181818">
+        <!-- Encabezado con logo y título -->
+        <VerticalStackLayout Padding="0,48,0,16" Spacing="8" HorizontalOptions="Center" Grid.Row="0">
+            <Image Source="logo_02.png" WidthRequest="72" HeightRequest="120" HorizontalOptions="Center"/>
+            <Border BackgroundColor="#232323" Stroke="#232323" StrokeThickness="0" StrokeShape="RoundRectangle" Padding="12,4" HorizontalOptions="Center" Margin="0,0,0,0">
+                <Label Text="PaymentManager" FontSize="26" FontAttributes="Bold" TextColor="#3B82F6" HorizontalOptions="Center"/>
+            </Border>
+            <Label Text="Gestión moderna y simple de pagos" FontSize="14" TextColor="#B0B0B0" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
