@@ -4,6 +4,8 @@ using PaymentManager.Data;
 using CommunityToolkit.Maui;
 using PaymentManager.Models;
 using PaymentManager.Validators;
+using Syncfusion.Licensing;
+using System.Text.Json;
 
 namespace PaymentManager
 {
@@ -15,6 +17,13 @@ namespace PaymentManager
         {
             var builder = MauiApp.CreateBuilder();
 
+            // Leer la clave de licencia de Syncfusion desde un archivo seguro
+            string licenseKey = LoadSyncfusionLicenseKey();
+            if (!string.IsNullOrWhiteSpace(licenseKey))
+            {
+                SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+            }
+            
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
@@ -81,6 +90,25 @@ namespace PaymentManager
                 db.Database.EnsureCreated();
             }
             return app;
+        }
+
+        private static string LoadSyncfusionLicenseKey()
+        {
+            try
+            {
+                var licenseFile = Path.Combine(AppContext.BaseDirectory, "syncfusion.license.json");
+                if (File.Exists(licenseFile))
+                {
+                    var json = File.ReadAllText(licenseFile);
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("SyncfusionLicenseKey", out var keyProp))
+                    {
+                        return keyProp.GetString() ?? string.Empty;
+                    }
+                }
+            }
+            catch { }
+            return string.Empty;
         }
     }
 }
