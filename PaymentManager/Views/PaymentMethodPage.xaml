@@ -46,14 +46,6 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                                    <Label>
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="📝 "/>
-                                                <Span Text="{Binding Description}" FontSize="14" TextColor="#B0B0B0"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
                                 </VerticalStackLayout>
                                 <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
                                     <Button Text="✏️ Editar"
