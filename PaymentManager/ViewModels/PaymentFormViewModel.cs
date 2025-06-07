@@ -11,6 +11,7 @@ namespace PaymentManager.ViewModels
         private readonly IUserService _userService;
         private readonly IPaymentPlanService _paymentPlanService;
         private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IUserPaymentPlanService _userPaymentPlanService;
 
         public ObservableCollection<UserPaymentPlan> UserPaymentPlans { get; } = new();
         public ObservableCollection<PaymentMethod> PaymentMethods { get; } = new();
@@ -50,6 +51,19 @@ namespace PaymentManager.ViewModels
             set => Entity = value;
         }
 
+        public decimal AmountPaid
+        {
+            get => Payment.AmountPaid;
+            set
+            {
+                if (Payment.AmountPaid != value)
+                {
+                    Payment.AmountPaid = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public PaymentFormViewModel(
             IPaymentService paymentService,
             IValidationService<Payment> paymentValidationService,
@@ -57,6 +71,7 @@ namespace PaymentManager.ViewModels
             IUserService userService,
             IPaymentPlanService paymentPlanService,
             IPaymentMethodService paymentMethodService,
+            IUserPaymentPlanService userPaymentPlanService,
             INavigation navigation
         )
             : base(paymentValidationService, messagingService, navigation)
@@ -65,6 +80,7 @@ namespace PaymentManager.ViewModels
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _paymentPlanService = paymentPlanService ?? throw new ArgumentNullException(nameof(paymentPlanService));
             _paymentMethodService = paymentMethodService ?? throw new ArgumentNullException(nameof(paymentMethodService));
+            _userPaymentPlanService = userPaymentPlanService ?? throw new ArgumentNullException(nameof(userPaymentPlanService));
             Payment = new Payment
             {
                 PaymentDate = DateTime.Now
@@ -86,9 +102,10 @@ namespace PaymentManager.ViewModels
             IUserService userService,
             IPaymentPlanService paymentPlanService,
             IPaymentMethodService paymentMethodService,
+            IUserPaymentPlanService userPaymentPlanService,
             INavigation navigation
         )
-            : this(paymentService, paymentValidationService, messagingService, userService, paymentPlanService, paymentMethodService, navigation)
+            : this(paymentService, paymentValidationService, messagingService, userService, paymentPlanService, paymentMethodService, userPaymentPlanService, navigation)
         {
             Payment = payment;
         }
@@ -192,6 +209,9 @@ namespace PaymentManager.ViewModels
                 {
                     SelectedUserPaymentPlan.Status = "Pendiente";
                 }
+                SelectedUserPaymentPlan.LastPaymentDate = Payment.PaymentDate;
+                SelectedUserPaymentPlan.NextDueDate = Payment.NextDueDate;
+                await _userPaymentPlanService.UpdateAsync(SelectedUserPaymentPlan);
             }
 
             if (Payment.Id != 0)

@@ -15,7 +15,8 @@ public partial class PaymentPage : ContentPage
             MauiProgram.Services.GetService<IMessagingService>()!,
             MauiProgram.Services.GetService<IUserService>()!,
             MauiProgram.Services.GetService<IPaymentPlanService>()!,
-            MauiProgram.Services.GetService<IPaymentMethodService>()!
+            MauiProgram.Services.GetService<IPaymentMethodService>()!,
+            MauiProgram.Services.GetService<IUserPaymentPlanService>()!
         );
     }
 

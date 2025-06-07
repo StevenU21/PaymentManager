@@ -10,10 +10,7 @@
         public DateTime PaymentDate { get; set; }
         public decimal AmountPaid { get; set; }
         public ushort PeriodsPaid { get; set; } = 1;
-
-        // Cambiado a propiedad auto-implementada para persistencia correcta
         public DateTime? NextDueDate { get; set; }
-
         public int? PaymentMethodId { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
     }

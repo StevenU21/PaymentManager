@@ -13,6 +13,7 @@
             private readonly IUserService _userService;
             private readonly IPaymentPlanService _paymentPlanService;
             private readonly IPaymentMethodService _paymentMethodService;
+            private readonly IUserPaymentPlanService _userPaymentPlanService;
     
             public ObservableCollection<Payment> Payments => Items;
     
@@ -26,7 +27,8 @@
                 IMessagingService messagingService,
                 IUserService userService,
                 IPaymentPlanService paymentPlanService,
-                IPaymentMethodService paymentMethodService
+                IPaymentMethodService paymentMethodService,
+                IUserPaymentPlanService userPaymentPlanService
             ) : base()
             {
                 _paymentService = paymentService;
@@ -35,6 +37,7 @@
                 _userService = userService;
                 _paymentPlanService = paymentPlanService;
                 _paymentMethodService = paymentMethodService;
+                _userPaymentPlanService = userPaymentPlanService;
                 RegisterPaymentCommand = new Command(async () => await OpenRegisterModal());
                 EditPaymentCommand = new Command<Payment>(async payment => await OpenEditModal(payment));
                 DeletePaymentCommand = new Command<Payment>(async payment => await DeletePaymentAsync(payment));
@@ -60,6 +63,7 @@
                         _userService,
                         _paymentPlanService,
                         _paymentMethodService,
+                        _userPaymentPlanService,
                         mainPage.Navigation
                     );
                     viewModel.EntitySaved += async payment =>
@@ -88,6 +92,7 @@
                         _userService,
                         _paymentPlanService,
                         _paymentMethodService,
+                        _userPaymentPlanService,
                         mainPage.Navigation
                     );
                     viewModel.EntitySaved += async payment =>
