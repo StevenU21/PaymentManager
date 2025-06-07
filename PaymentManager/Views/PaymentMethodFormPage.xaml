@@ -7,17 +7,17 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="10"
-                             Spacing="10">
+                             Spacing="10"
+                             Margin="0,32,0,0">
             <!-- Botón Cancelar arriba a la derecha -->
-            <Button Text="Cancelar"
+            <Button Text="❌ Cancelar"
                     HorizontalOptions="End"
                     Margin="0,0,0,10"
                     Command="{Binding CancelCommand}"
                     BackgroundColor="#2D2D2D"
                     TextColor="#FAFAFA"
                     CornerRadius="8"
-                    FontAttributes="Bold"
-                    HeightRequest="44"/>
+                    FontAttributes="Bold"/>
 
             <Border Padding="16"
                     BackgroundColor="#232323"
@@ -34,22 +34,25 @@
                 </Border.Shadow>
 
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Nombre"
-                           TextColor="#FAFAFA"
-                           FontAttributes="Bold"/>
+                    <Label TextColor="#FAFAFA" FontAttributes="Bold">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="💳 Nombre del método"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
                     <Entry Placeholder="Nombre del método"
                            Text="{Binding PaymentMethod.Name}"
                            TextColor="#FAFAFA"
                            PlaceholderColor="#B0B0B0"
-                           BackgroundColor="#181818"/>
+                           BackgroundColor="#232323"/>
 
-                    <Button Text="Guardar"
+                    <Button Text="💾 Guardar"
                             Command="{Binding SaveCommand}"
                             BackgroundColor="#1976D2"
                             TextColor="White"
                             CornerRadius="8"
-                            FontAttributes="Bold"
-                            HeightRequest="44"/>
+                            FontAttributes="Bold"/>
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>

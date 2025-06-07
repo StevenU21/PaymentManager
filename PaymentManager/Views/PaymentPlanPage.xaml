@@ -9,15 +9,14 @@
     <ScrollView>
         <VerticalStackLayout Padding="10"
                              Spacing="10">
-            <Button Text="Registrar"
+            <Button Text="➕ Registrar"
                     HorizontalOptions="End"
                     Margin="0,0,0,10"
                     Command="{Binding RegisterPaymentPlanCommand}"
                     BackgroundColor="#2D2D2D"
                     TextColor="#FAFAFA"
                     CornerRadius="8"
-                    FontAttributes="Bold"
-                    HeightRequest="44"/>
+                    FontAttributes="Bold"/>
 
             <CollectionView ItemsSource="{Binding PaymentPlans}"
                             ItemsLayout="VerticalList">
@@ -37,41 +36,50 @@
                                         Radius="8"
                                         Opacity="0.5"/>
                             </Border.Shadow>
-                            <VerticalStackLayout>
-                                <Label Text="{Binding Name, StringFormat='Nombre: {0}'}"
-                                       FontAttributes="Bold"
-                                       FontSize="16"
-                                       TextColor="#FAFAFA"/>
-                                <Label Text="{Binding DayOfMonthToPay, StringFormat='Día de pago: {0}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <Label Text="{Binding TotalAmount, StringFormat='Monto: {0:C}'}"
-                                       FontSize="14"
-                                       TextColor="#B0B0B0"
-                                       Margin="0,2,0,0"/>
-                                <HorizontalStackLayout Spacing="10"
-                                                       Margin="0,10,0,0">
-                                    <Button Text="Editar"
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="📦 "/>
+                                                <Span Text="{Binding Name}" FontAttributes="Bold" FontSize="16" TextColor="#FAFAFA"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="📅 "/>
+                                                <Span Text="{Binding DayOfMonthToPay}" FontSize="14" TextColor="#B0B0B0"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="💲 "/>
+                                                <Span Text="{Binding TotalAmount, StringFormat='{0:C}'}" FontSize="14" TextColor="#B0B0B0"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                    <Button Text="✏️ Editar"
                                             Command="{Binding BindingContext.EditPaymentPlanCommand, Source={x:Reference PaymentPlanPageRoot}}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#1976D2"
                                             TextColor="White"
                                             CornerRadius="8"
-                                            FontSize="13"
-                                            HeightRequest="36"
-                                            WidthRequest="80"/>
-                                    <Button Text="Eliminar"
+                                            FontSize="13"/>
+                                    <Button Text="🗑️ Eliminar"
                                             Command="{Binding BindingContext.DeletePaymentPlanCommand, Source={x:Reference PaymentPlanPageRoot}}"
                                             CommandParameter="{Binding .}"
-                                            BackgroundColor="#B00020"
+                                            BackgroundColor="#D32F2F"
                                             TextColor="White"
                                             CornerRadius="8"
-                                            FontSize="13"
-                                            HeightRequest="36"
-                                            WidthRequest="80"/>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                                            FontSize="13"/>
+                                </VerticalStackLayout>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
