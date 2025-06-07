@@ -66,7 +66,7 @@
         <ShellContent Route="paymentPlans" ContentTemplate="{DataTemplate views:PaymentPlanPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Pagos de Planes de Usuarios" Icon="customer.png">
+    <FlyoutItem Title="Asignar Planes" Icon="customer.png">
         <ShellContent Route="userpaymentPlans" ContentTemplate="{DataTemplate views:UserPaymentPlansPage}" />
     </FlyoutItem>
 
